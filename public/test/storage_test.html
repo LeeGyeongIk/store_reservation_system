@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+    <img src="" id="myimg" name="myimg" width="400" height="400">
+    <input class="form-control mt-2" type="file" id="image">
+    <button id="test">삭제</button>
+
+    <script>
+        const storage = firebase.storage();
+        //const storageRef = storage.refFromURL("https://firebasestorage.googleapis.com/v0/b/store-reservation-system.appspot.com/o/%EB%B2%84%EA%B1%B0%ED%82%B9%2F%E1%84%87%E1%85%A5%E1%84%80%E1%85%A5%E1%84%8F%E1%85%B5%E1%86%BC.jpg?alt=media&token=4f610ef9-4cc4-4c54-ba55-a5598727b5db");
+        const storageRef = storage.ref("버거킹/test.png");
+        
+        storageRef.getDownloadURL().then((url) => {
+            var img = document.getElementById("myimg");
+            img.src = url;
+            console.log(url);
+        })
+
+        $("#test").click(function() {
+            storageRef.delete().then(() => {
+                alert("success");
+            }).catch((error) => {
+                alert(error);
+            }) 
+        })
+    </script>
+</body>
+
+</html>

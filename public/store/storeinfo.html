@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const db = firebase.firestore();
+
+        var querystring = new URLSearchParams(window.location.search);
+
+        db.collection("매장").doc(querystring.get("id")).get().then((result) => {
+            $(".title").html(`매장명 : ${result.data().매장명}`);
+            $(".location").html(`매장위치 : ${result.data().매장위치}`);
+            $(".detail-pic").css("background-image", `url(${result.data().매장이미지})`);
+        })
+    </script>
+
+    <div class="container">
+        상세페이지
+        <div class="detail-pic my-4" style=""></div>
+        <div>
+            <hr>
+            <p class="title"></p>
+            <p class="location"></p>
+            <hr>
+        </div>
+    </div>
+</body>
+
+</html>

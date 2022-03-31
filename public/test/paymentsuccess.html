@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    queryString으로 넘겨 받은 값 : 
+    <script>
+        let queryString = window.location.href;
+        var splited = queryString.split("?").pop().split("&");
+        for (var i in splited) {
+            document.write("<p>"+ decodeURI(decodeURIComponent(splited[i])) +"</p>");
+        }
+    </script>
+    <button onclick="window.location.href='paymentsystem.html'">다시 결제창으로 가기</button>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        document.write("사용자 이름 " + localStorage.getItem("username") + "<br>");
+        document.write("사용자 이메일 " + localStorage.getItem("useremail") + "<br>");
+        document.write("사용자 전화번호 " + localStorage.getItem("usercall") + "<br>");
+    </script>
+    <button type="submit" class="btn btn-primary" id="logout">로그아웃</button>
+    <script>
+        $("#logout").click(function () {
+            firebase.auth().signOut().then((result) => {
+                localStorage.removeItem("username");
+                localStorage.removeItem("usercall");
+                localStorage.removeItem("useremail");
+                alert("로그아웃 하셨습니다.");
+                window.location.href = "login.html";
+            });
+        })
+    </script>
+</body>
+
+</html>

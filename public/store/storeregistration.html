@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <div class="container mt-3">
+        <div class="mb-3">
+            <input type="text" class="form-control mt-2" id="storename" placeholder="매장명">
+        </div>
+        <div class="mb-3">
+            <input type="text" class="form-control mt-2" id="storelocation" placeholder="매장위치">
+        </div>
+        <div>
+            <input class="form-control mt-2" type="file" id="image">
+        </div>
+        <div>
+            <button class="btn btn-danger mt-3" id="send">올리기</button>
+        </div>
+    </div>
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+
+        $("#send").click(function () {
+            var file = document.querySelector("#image").files[0];
+            var storageRef = storage.ref();
+            var path = storageRef.child($("#storename").val() + "/" + file.name);
+            var upload = path.put(file);
+
+            upload.on("state_changed",
+                // 변화시 동작하는 함수 
+                null,
+                //에러시 동작하는 함수
+                (error) => {
+                    console.error(error);
+                },
+                // 성공시 동작하는 함수
+                () => {
+                    upload.snapshot.ref.getDownloadURL().then((url) => {
+                        db_save = {
+                            매장명: $("#storename").val(),
+                            매장위치: $("#storelocation").val(),
+                            매장이미지: url
+                        };
+                        db.collection("매장").add(db_save).then((result) => {
+                            alert("매장 등록이 완료되었습니다.");
+                            window.location.href = "add_menu_test.html";
+                        }).catch((err) => {
+                            console.log(err);
+                        });
+                    });
+                }
+            );
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+  #keyword {
+    border: none;
+    background: #E0D3B6;
+    padding: 6px;
+    font-size: 18px;
+    width: 85%;
+    border-radius: 6px;
+    color: white;
+  }
+  #keyword:focus {
+    outline: none;
+  }
+  #search_button {
+    border: none;
+    background: #E0D3B6;
+    padding: 8px;
+    color: white;
+    height: auto;
+    cursor: pointer;
+  }
+  .searchbox {
+    max-width: 500px;
+    width: 100%;
+    height: auto;
+    background-color: #ECDFBF;
+    overflow: hidden;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  .store {
+      display: flex;
+      background-color:khaki;
+      cursor: pointer;
+      max-width: 500px;
+      max-height: 200px;
+      width: 100%;
+      height: 100%;
+      margin: 0 auto;
+      margin-bottom: 5px;
+    }
+  .thumbnail {
+    margin: 20px;
+    max-width: 200px;
+    width: 100%;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+  }
+  .store .store_location {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .store .store_name {
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .store .date {
+    color: grey;
+    font-size: 13px;
+  }
+  .detail-pic {
+    max-width: 300px;
+    max-height: 300px;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  } 
+  .btn{
+    width:10px;
+  }
