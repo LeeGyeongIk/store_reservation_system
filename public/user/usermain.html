@@ -29,47 +29,61 @@
 </head>
 
 <body>
-    <div class="container mt-3">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid" style="background-color:cornsilk;margin-bottom:10px">
-                <a class="navbar-brand" href="usermain.html">매장예약서비스</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="usermain.html">Main</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="userinfo.html">My</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown link
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid" style="margin-bottom:10px">
+            <a class="navbar-brand" href="usermain.html">매장예약서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="usermain.html">Main</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="userinfo.html">My</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown link
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
-        </nav>
-        <div class="searchbox">
-            <input onkeyup="vacuum()" type="text" id="keyword" placeholder="Search">
-            <button id="search_button" onclick="filter()">search</button>
+        </div>
+    </nav>
+    <div style="background-color:beige">
+        <div class="container mt-3">
+            <div class="searchbox">
+                <input onkeyup="vacuum()" type="text" id="keyword" placeholder="Search">
+                <button id="search_button" onclick="filter()">search</button>
+            </div>
+            <div class="category-group">
+                <input type="radio" class="btn-check" name="options-outlined" id="none" autocomplete="off">
+                <label class="btn btn-outline-success" for="none">없음</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="cafe" autocomplete="off">
+                <label class="btn btn-outline-success" for="cafe">카페</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="restaurant" autocomplete="off">
+                <label class="btn btn-outline-success" for="restaurant">식당</label>
+
+                <input type="radio" class="btn-check" name="options-outlined" id="convenience" autocomplete="off">
+                <label class="btn btn-outline-success" for="convenience">편의점</label>
+            </div>
         </div>
     </div>
 
     <script>
         const db = firebase.firestore();
-        store_info = [];
+        var store_info = [];
 
         db.collection("매장").get().then((store) => {
             store.forEach((doc) => {
@@ -95,6 +109,33 @@
     </script>
 
     <script>
+        $("#none").click(function () {
+            initApp(store_info);
+        })
+        $("#cafe").click(function () {
+            category_search("카페");
+        })
+        $("#restaurant").click(function () {
+            category_search("식당");
+        })
+        $("#convenience").click(function () {
+            category_search("편의점");
+        })
+
+        function category_search(category_temp) {
+            var category = [];
+
+            store_info.forEach((doc) => {
+                if (doc.data().매장카테고리 == category_temp) {
+                    category.push(doc);
+                }
+            })
+            document.getElementById("keyword").value = "";
+            initApp(category);
+        }
+    </script>
+
+    <script>
         function vacuum() {
             var text = document.getElementById("keyword").value;
 
@@ -109,12 +150,12 @@
             $(".store").empty();
             data.forEach((doc) => {
                 var templete =
-                    `<div class="store" onclick="window.location.href='../store/storeinfo.html?id=${doc.id}'">
+                    `<div class="store" onclick="window.location.href='storeinfo.html?id=${doc.id}'">
                      <div class="thumbnail" style="background-image: url('${doc.data().매장이미지}')"></div>
                      <div class="flex-grow-1 p-4">
                      <h5 class="store_name">${doc.data().매장명}</h5>
                      <p class="date">2030년 1월 8일</p>
-                     <p class="store_location">${doc.data().매장위치}</p>
+                     <p class="store_location">${doc.data().매장위치.split("&")[0]}</p>
                      <p class="float-end">❤️0</p>
                      </div>
                      </div>`;

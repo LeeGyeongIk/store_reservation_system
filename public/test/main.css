@@ -19,9 +19,8 @@
     cursor: pointer;
   }
   .container {
-    max-width: 530px;
+    max-width: 500px;
     width: 100%;
-    margin: 0 auto;
   }
   .searchbox {
     max-width: 500px;
@@ -64,7 +63,7 @@
     font-size: 13px;
   }
   .detail-pic {
-    max-width: 500px;
+    max-width: 300px;
     max-height: 300px;
     width: 100%;
     height: 100%;
