@@ -30,8 +30,7 @@
 <body>
     <div class="container mt-3" style="max-width:500px;width:100%;margin: 0 auto">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" placeholder="Name"
-                style="max-width:500px;width:100%">
+            <input type="text" class="form-control" id="name" placeholder="Name" style="max-width:500px;width:100%">
             <label for="floatingInput">Name</label>
         </div>
         <div class="form-floating mb-3">
@@ -48,13 +47,24 @@
     </div>
 
     <script>
+        const db = firebase.firestore();
+    </script>
+
+    <script>
         $("#signup").click(function () {
             var name = $("#name").val();
             var email = $("#email").val();
             var password = $("#password").val();
+            var user_data = {
+                고객명: name,
+                이메일: email,
+            }
+
             firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
-                result.user.updateProfile({ displayName: name + "&" + "client"}).then(() => {
-                    window.location.href = "login.html";
+                result.user.updateProfile({ displayName: name + "&" + "client" }).then(() => {
+                    db.collection("고객").doc(result.user.uid).set(user_data).then(() => {
+                        window.location.href="login.html";
+                    })
                 })
             }).catch((error) => {
                 if (error.code == "auth/email-already-in-use") {

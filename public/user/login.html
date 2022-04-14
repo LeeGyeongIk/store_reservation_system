@@ -57,7 +57,8 @@
                 .then((result) => {
                     var username = result.user.displayName;
                     var useremail = result.user.email;
-                    setUserdataToLocal(username, useremail);
+                    var useruid = result.user.uid;
+                    setUserdataToLocal(username, useremail, useruid);
                 })
                 .catch((error) => {
                     if (error.code == "auth/wrong-password") {
@@ -100,9 +101,10 @@
             });
         }
 
-        function setUserdataToLocal(username, useremail) {
+        function setUserdataToLocal(username, useremail, useruid) {
             localStorage.setItem("username", username);
             localStorage.setItem("useremail", useremail);
+            localStorage.setItem("useruid", useruid);
             window.location.href = "usermain.html";
         }
 
