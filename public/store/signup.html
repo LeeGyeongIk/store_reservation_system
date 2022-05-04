@@ -28,37 +28,54 @@
 </head>
 
 <body>
-    <div class="container mt-3" style="max-width:500px;width:100%;margin: 0 auto">
-        <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" placeholder="Name" style="max-width:500px;width:100%">
-            <label for="floatingInput">Name</label>
+    <div style="text-align:center;font-size: 3em;margin-top:5%;">회원가입</div>
+    <div class="container mt-3"
+        style="max-width:500px;width:100%;margin: 0 auto;border: 1px solid gainsboro;border-radius: 10px">
+        <div style="padding:3%">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="Name" style="max-width:500px;width:100%">
+                <label for="floatingInput">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="phone" placeholder="Phone"
+                    style="max-width:500px;width:100%">
+                <label for="floatingInput">Phone</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                    style="max-width:500px;width:100%">
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" id="password" placeholder="Password"
+                    style="max-width:500px;width:100%;margin-bottom:10px">
+                <label for="floatingPassword">Password</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm" id="signup"
+                style="width:100%;margin-top:10px">회원가입</button>
         </div>
-        <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="email" placeholder="name@example.com"
-                style="max-width:500px;width:100%">
-            <label for="floatingInput">Email address</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" id="password" placeholder="Password"
-                style="max-width:500px;width:100%;margin-bottom:10px">
-            <label for="floatingPassword">Password</label>
-        </div>
-        <button type="submit" class="btn btn-primary" id="signup">회원가입</button>
     </div>
+
+    <script>
+        const db = firebase.firestore();
+    </script>
 
     <script>
         $("#signup").click(function () {
             var name = $("#name").val();
+            var phone = $("#phone").val();
             var email = $("#email").val();
             var password = $("#password").val();
-            firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
-                const db = firebase.firestore();
 
-                result.user.updateProfile({ displayName: name + "&" + "entrepreneur" }).then(() => {
+            $("#signup").css("cursor", "wait");
+            $("body").css("cursor", "wait");
+
+            firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
+                result.user.updateProfile({ displayName: name + "&" + phone + "&" + "entrepreneur" }).then(() => {
                     db.collection("매장").doc(result.user.uid).set({
-                        
+
                     }).then(() => {
-                        window.location.href="login.html";
+                        window.location.href = "login.html";
                     })
                 })
             }).catch((error) => {

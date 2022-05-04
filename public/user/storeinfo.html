@@ -43,20 +43,21 @@
             <hr>
         </div>
         <button style="max-width:530px;width:100%" type="button" class="btn btn-outline-warning"
-            onclick="requestPay()">예약하기</button>
+            id="reservation">예약하기</button>
     </div>
+
     <script>
         const db = firebase.firestore();
         var store_title;
         var querystring = new URLSearchParams(window.location.search);
 
         db.collection("매장").doc(querystring.get("id")).get().then((result) => {
-            store_title = result.data().매장명
+            store_title = result.data().매장이름
             $(".title").html(`매장명 : ${store_title}`);
-            $(".location").html(`매장위치 : ${result.data().매장위치.split("&")[0]}`);
-            $(".detail-pic").css("background-image", `url(${result.data().매장이미지})`);
+            $(".location").html(`매장위치 : ${result.data().위치정보.split("&")[0]}`);
+            $(".detail-pic").css("background-image", `url(${result.data().매장사진})`);
 
-            var location = { lat: parseFloat(result.data().매장위치.split("&")[1]), lng: parseFloat(result.data().매장위치.split("&")[2]) };
+            var location = { lat: parseFloat(result.data().위치정보.split("&")[1]), lng: parseFloat(result.data().위치정보.split("&")[2]) };
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: location,
                 zoom: 15
@@ -65,43 +66,13 @@
             var maker = new google.maps.Marker({ position: location, map: map });
         })
     </script>
-    <script>
-        function requestPay() {
-            let now = new Date();
-            // IMP.request_pay(param, callback) 결제창 호출
-            var IMP = window.IMP; // 생략 가능
-            IMP.init("imp17369910"); // 예: imp00000000
-            IMP.request_pay({ // param
-                pg: "html5_inicis",
-                pay_method: "card",
-                merchant_uid: now.getFullYear()+"/"+(now.getMonth()+1)+"/"+now.getDate()+"/"+now.getHours()+":"+now.getMinutes()+":"+now.getSeconds(),
-                name: store_title,
-                amount: 100,
-                buyer_email: localStorage.getItem("useremail"),
-                buyer_name: localStorage.getItem("username").split("&")[0],
-                //buyer_tel: "010-4242-4242",
-                //buyer_addr: "서울특별시 강남구 신사동",
-                //buyer_postcode: "01181",
-                m_redirect_url: "user_reservation_status.html"
-            }, function (rsp) { // callback
-                if (rsp.success) {
-                    var reserved_info = {
-                        예약자명: localStorage.getItem("username").split("&")[0],
-                        예약자이메일: localStorage.getItem("useremail")
-                    }
 
-                    db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("예약현황").add(reserved_info).then(() => {
-                        db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약현황").add(reserved_info).then(() => {
-                            alert("예약이 완료되었습니다.");
-                            window.location.href = "user_reservation_status.html";
-                        })
-                    })
-                } else {
-                    alert("결제 실패");
-                }
-            });
-        }
+    <script>
+        $("#reservation").click(function () {
+            window.location.href="reservation.html?id=" + querystring.get("id");
+        })
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>

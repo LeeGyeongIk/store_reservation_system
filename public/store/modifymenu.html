@@ -69,7 +69,7 @@
         $("#img_section").attr("src", localStorage.getItem("menu_img"));
         $("#menu_title").attr("value", querystring.get("menu_title"));
         $("#menu_price").attr("value", querystring.get("menu_price"));
-        $("#menu_info").attr("value", querystring.get("menu_info"));
+        $("#menu_info").html("value", querystring.get("menu_info"));
 
         reader.onload = (readerEvent) => {
             $("#img_section").attr("src", readerEvent.target.result);

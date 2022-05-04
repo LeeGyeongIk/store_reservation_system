@@ -1,40 +1,43 @@
   .container {
-    max-width: 500px;
+    max-width: 530px;
     width: 100%;
+    margin: 0 auto;
   }
-  .menu {
+  .reservation {
       display: flex;
-      background-color:khaki;
-      cursor: pointer;
+      background-color:beige;
       max-width: 500px;
       max-height: 200px;
       width: 100%;
       height: 100%;
       margin: 0 auto;
       margin-bottom: 5px;
+      cursor: pointer;
     }
   .thumbnail {
     margin: 20px;
     max-width: 200px;
     width: 100%;
+    height: 150px;
     border-radius: 10px;
     background-size: cover;
     background-position: center;
   }
-  .menu .menu_info {
-    color: grey;
-    font-size: 13px;
-  }
-  .menu .menu_name {
-    font-size: 17px;
-    font-weight: 600;
-  }
-  .menu .menu_price {
+  .reservation .store_location {
     font-size: 16px;
     font-weight: 600;
   }
+  .reservation .store_name {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 20%;
+  }
+  .reservation .date {
+    color: grey;
+    font-size: 13px;
+  }
   .detail-pic {
-    max-width: 300px;
+    max-width: 500px;
     max-height: 300px;
     width: 100%;
     height: 100%;
