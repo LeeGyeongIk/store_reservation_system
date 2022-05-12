@@ -1,3 +1,4 @@
+<!-- wifi, 개별룸, 단체석 -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,6 +32,10 @@
             <input type="text" class="form-control" id="storename" placeholder="매장명">
             <label for="floatingInput">매장명</label>
         </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="table_count" placeholder="매장명">
+            <label for="floatingInput">테이블 수</label>
+        </div>
         <div class="form-floating" style="margin-bottom:15px">
             <select class="form-select" id="category" aria-label="Floating label select example">
                 <option value="카페">카페</option>
@@ -49,7 +54,8 @@
         <div class="mb-3">
             <div style="font-size: 1.5em;margin-bottom:15px">매장 대표 이미지</div>
             <img src="dummy_image.jpeg"
-                style="max-width:475px;width:100%;max-height:300px;height:100%;margin-bottom:15px;border: 1px solid gainsboro" id="store_image">
+                style="max-width:475px;width:100%;max-height:300px;height:100%;margin-bottom:15px;border: 1px solid gainsboro"
+                id="store_image">
             <input class="form-control" type="file" id="image">
         </div>
         <hr style="height:2px">
@@ -84,6 +90,27 @@
                                 놀이방
                             </label>
                         </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="WIFI" id="flexCheckDefault3"
+                                name="amenities">
+                            <label class="form-check-label" for="flexCheckDefault3">
+                                WIFI
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="개별룸" id="flexCheckDefault4"
+                                name="amenities">
+                            <label class="form-check-label" for="flexCheckDefault4">
+                                개별룸
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="단체룸" id="flexCheckDefault5"
+                                name="amenities">
+                            <label class="form-check-label" for="flexCheckDefault5">
+                                단체룸
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -115,7 +142,6 @@
             });
             var maker = new google.maps.Marker({ position: location, map: map });
             location_temp = location;
-            console.log(location_temp);
         } 
     </script>
     <script
@@ -164,14 +190,13 @@
                             메뉴판: "데이터없음",
                             업종: $("#category option:selected").val(),
                             위치정보: $("#storelocation").val() + "&" + location_temp.lat + "&" + location_temp.lng,
+                            테이블갯수: Number($("#table_count").val()),
                             편의시설: amenities
                         };
                         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).set(store_info).then(() => {
                             alert("매장 등록이 완료되었습니다.");
                             window.location.href = "menu.html";
-                        }).catch((err) => {
-                            console.log(err);
-                        });
+                        })
                     });
                 }
             );

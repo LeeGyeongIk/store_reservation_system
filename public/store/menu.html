@@ -44,9 +44,17 @@
                 <hr style="height:2px">
                 <p>메뉴 수정 & 삭제</p>
             </div>
+            <div style="cursor:pointer;" onclick="window.location.href='order_sheet.html'">
+                <hr style="height:2px">
+                <p>주문표</p>
+            </div>
             <div style="cursor:pointer;" onclick="window.location.href='store_reservation_state.html'">
                 <hr style="height:2px">
-                <p>예약현황</p>
+                <p>예약 현황</p>
+            </div>
+            <div style="cursor:pointer;" onclick="window.location.href='QRCODE.html'">
+                <hr style="height:2px">
+                <p>QR코드</p>
             </div>
             <div style="cursor:pointer;" onclick="logout()">
                 <hr style="height:2px">
@@ -59,7 +67,7 @@
 
     <!--오프캔버스 바텀 메뉴 추가 화면-->
     <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel"
-        style="height:100%;background-color: beige;">
+        style="height:100%">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasBottomLabel">메뉴추가</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -104,7 +112,7 @@
 
     <!--오프캔버스 라이트 메뉴 수정 또는 삭제 화면-->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel"
-        style="width:100%;background-color: beige;">
+        style="width:100%">
         <div class="offcanvas-header">
             <h5 id="offcanvasRightLabel">메뉴 수정 & 삭제</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>

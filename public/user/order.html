@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="order.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <!-- 오프캔버스 라이트 장바구니 -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-cart" aria-labelledby="offcanvasRightLabel"
+        style="width:100%">
+        <div class="offcanvas-header">
+        </div>
+        <div class="offcanvas-body" style="max-width:500px;width:100%;margin:0 auto">
+            <div style="text-align:center;font-size:3em;margin-bottom:2%">장바구니</div>
+            <hr>
+            <div style="text-align:center;padding:0px;overflow:scroll" class="offcanvas-body small" id="cart-content"></div>
+            <div
+                style="text-align:center;max-width:500px;width:100%;">
+                <hr>
+                <h5><strong>총 주문금액</strong></h5>
+                <br>
+                <div id="total_price" style="font-size:2em"></div>
+                <hr>
+                <button type="button" class="btn btn-primary" id="do_order"
+                    style="width:100%;margin-bottom:10px">주문하기</button>
+                <button type="button" class="btn btn-warning" id="back_menu" style="width:100%;">돌아가기</button>
+            </div>
+        </div>
+    </div>
+    <!-- 오프캔버스 라이트 장바구니 -->
+
+    <!--오프캔버스 라이트 메뉴 추가-->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-add_menu"
+        aria-labelledby="offcanvasRightLabel" style="width:100%">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">메뉴 주문</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" style="margin: 0 auto">
+            <div style="text-align:center;font-size: 3em;margin-bottom:2%">메뉴 주문</div>
+            <hr style="height:2px">
+            <div>
+                <div>
+                    <img src="dummy_image.jpeg"
+                        style="margin-bottom:10px;border: 1px solid gainsboro;width:400px;height:400px"
+                        id="add_menu_img">
+                </div>
+                <div class="accordion" id="accordionExample" style="margin-bottom:15px">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                메뉴 정보
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body" id="add_menu_title">
+
+                            </div>
+                            <div class="accordion-body" id="add_menu_price">
+
+                            </div>
+                            <div class="accordion-body" id="add_menu_info">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;margin-top:10%;margin-bottom:20%">
+                    <button type="button" class="btn btn-primary" id="minus">-</button>
+                    <label id="count" style="font-size: 3em;"></label>
+                    <button type="button" class="btn btn-primary" id="plus">+</button>
+                </div>
+                <button type="button" class="btn btn-primary" style="width:100%" id="add_menu">메뉴 추가</button>
+            </div>
+        </div>
+    </div>
+    <!--오프캔버스 라이트 메뉴 추가-->
+
+    <!-- 오프캔버스 바텀 주문완료 -->
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom-done-order"
+        aria-labelledby="offcanvasBottomLabel" style="height:100%">
+        <div class="offcanvas-header">
+        </div>
+        <div class="offcanvas-body small" style="text-align: center; padding:0px;overflow:scroll">
+            <div style="text-align:center;font-size: 2em;margin-bottom:3%" id="order_ready_title">주문이 완료되었습니다.</div>
+            <div style="text-align:center;font-size: 1.5em;margin-bottom:3%" id="order_ready_num">잠시만 기다려주세요.</div>
+            <hr>
+            <div id="done_order"></div>
+            <div style="text-align:center">
+                <hr>
+                <h5><strong>총 주문금액</strong></h5>
+                <br>
+                <div id="total_price_done_order" style="font-size:2em"></div>
+                <hr>
+            </div>
+        </div>
+    </div>
+    <!-- 오프캔버스 바텀 주문완료 -->
+
+    <script>
+        const db = firebase.firestore();
+        var store_id = (window.location.href.split("?")[1]).split("=")[1];
+        var table_num = (window.location.href.split("?")[2]).split("=")[1];
+        //var store_id = "WyJDYIZTWhbxdUCr8WsO45KjVOl2";
+        //var table_num = 1;
+        var cart = new Array();
+
+        db.collection("매장").doc(store_id).collection("메뉴정보").get().then((result) => {
+            result.forEach((doc) => {
+                var templete =
+                    `<div class="store" onclick="menu_add_offcanvas('${doc.id}')">
+                     <div class="thumbnail" style="background-image: url('${doc.data().메뉴사진}')"></div>
+                     <div class="flex-grow-1 p-4">
+                     <h5 class="store_name">${doc.data().메뉴명}</h5>
+                     <p class="date">${doc.data().메뉴정보}</p>
+                     <p class="store_location">${doc.data().메뉴가격}원</p>
+                     </div>
+                     </div>`;
+                $(".container").append(templete);
+            })
+        })
+    </script>
+
+    <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%">주문</div>
+    <div class="container mt-3" id="content-body">
+        <button id="cart-button" style="position:fixed;right:0;bottom:10%;border-radius:100%"><img
+                style="max-width:50px;max-height:50px;" src="cart.png" alt=""></button>
+    </div>
+    <script>
+        var menu_img;
+        var menu_title;
+        var menu_price;
+        var menu_info;
+        var menu_count = 0;
+
+        print_total_price(cart);
+
+        function menu_add_offcanvas(id) {
+            $("#offcanvasRight-add_menu").offcanvas("show");
+            $("#offcanvasScrolling").offcanvas("show");
+            $("#add_menu_img").attr("src", "dummy_image.jpeg");
+
+            menu_img = "";
+            menu_title = "";
+            menu_price = 0;
+            menu_info = "";
+            menu_count = 0;
+
+            db.collection("매장").doc(store_id).collection("메뉴정보").doc(id).get().then((result) => {
+                menu_img = result.data().메뉴사진;
+                menu_title = result.data().메뉴명;
+                menu_price = result.data().메뉴가격;
+                menu_info = result.data().메뉴정보;
+
+                $("#add_menu_img").attr("src", menu_img);
+                $("#add_menu_title").html("메뉴명: " + menu_title);
+                $("#add_menu_price").html("메뉴가격: " + menu_price);
+                $("#add_menu_info").html("메뉴정보: " + menu_info);
+            }).then(() => {
+                cart.forEach((doc) => {
+                    if (menu_title == doc.menu_title) {
+                        menu_count = doc.menu_count;
+                    }
+                })
+
+                if (menu_count == 0) {
+                    menu_count = 1;
+                }
+                print_count(menu_count);
+            })
+        }
+
+        $("#plus").click(function () {
+            menu_count++;
+            print_count(menu_count);
+        })
+
+        $("#minus").click(function () {
+            if (menu_count != 1) {
+                menu_count--;
+                print_count(menu_count);
+            }
+        })
+
+        $("#add_menu").click(function () {
+            var menu = new Object();
+            var is_menu = false;
+
+            cart.forEach((doc) => {
+                if (doc.menu_title == menu_title) {
+                    is_menu = true;
+                    doc.menu_count = menu_count;
+                }
+            })
+
+            if (is_menu == false) {
+                menu.menu_img = menu_img;
+                menu.menu_title = menu_title;
+                menu.menu_price = menu_price;
+                menu.menu_info = menu_info;
+                menu.menu_count = menu_count;
+                cart.push(menu);
+            }
+
+            print_cart(cart);
+            print_total_price(cart);
+            $("#offcanvasRight-add_menu").offcanvas("hide");
+        })
+
+        $("#cart-button").click(function () {
+            $("#offcanvasRight-cart").offcanvas("show");
+        })
+
+        $("#do_order").click(function () {
+            $("#done_order").empty();
+            cart.forEach((result) => {
+                var templete =
+                    `<div style="max-width:500px;width:100%;margin: 0 auto">
+                     <h5>${result.menu_title}</h5>
+                     <p>${result.menu_info}</p>
+                     <h5>${result.menu_price}원</h5>
+                     <h5 id="${result.menu_title.replace(/ /g, "")}-count">${result.menu_count}개</h5>
+                     <div style="display:flex">
+                     </div>
+                     </div>
+                     <hr>`
+
+                $("#done_order").append(templete);
+            })
+
+            var order = {
+                주문테이블: table_num,
+                주문: cart,
+                준비: false
+            };
+
+            db.collection("매장").doc(store_id).collection("테이블정보").doc(table_num.toString()).collection("주문정보").add(order).then((result) => {
+                $("#offcanvasBottom-done-order").offcanvas("show");
+                localStorage.setItem("order", result.id);
+            }).then(() => {
+                db.collection("매장").doc(store_id).collection("테이블정보").doc(table_num.toString()).collection("주문정보").doc(localStorage.getItem("order")).onSnapshot((doc) => {
+                    if (doc.data().준비 == true) {
+                        var audio = new Audio("alarm.mp3");
+                        audio.play();
+                        Swal.fire({
+                            icon: 'success',
+                            title: '주문하신 메뉴가 준비되었습니다.',
+                            text: '주문번호: ' + localStorage.getItem("order")
+                        });
+                        $("#order_ready_title").html("주문하신 메뉴가 준비되었습니다.");
+                        $("#order_ready_num").attr("style", "text-align:center;font-size: 2em;margin-bottom:2%");
+                        $("#order_ready_num").html("주문번호<br>" + localStorage.getItem("order"));
+                    }
+                })
+            })
+        })
+
+        $("#back_menu").click(function () {
+            $("#offcanvasRight-cart").offcanvas("hide");
+        })
+
+        function print_cart(cart) {
+            $("#cart-content").empty();
+            cart.forEach((data) => {
+                var templete =
+                    `<div style="max-width:500px;width:100%;margin: 0 auto">
+                     <button type="button" class="btn-close text-reset" style="float:right" onclick="delete_cart('${data.menu_title}')"></button>
+                     <h5>${data.menu_title}</h5>
+                     <p>${data.menu_info}</p>
+                     <h5>${data.menu_price}원</h5>
+                     <div style="display:flex">
+                     <button type="button" class="btn btn-primary" id="${data.menu_title.replace(/ /g, "")}-minus" style="display:flex">-</button>
+                     <h5 id="${data.menu_title.replace(/ /g, "")}-count">${data.menu_count}개</h5>
+                     <button type="button" class="btn btn-primary" id="${data.menu_title.replace(/ /g, "")}-plus">+</button>
+                     </div>
+                     </div>
+                     <hr>
+                     <script>
+                        $("#${data.menu_title.replace(/ /g, "")}-minus").click(function () {
+                            cart.forEach((data) => {
+                                if ("${data.menu_title.replace(/ /g, "")}" == data.menu_title.replace(/ /g,"")) {
+                                    if (data.menu_count != 1) {
+                                        data.menu_count--;
+                                        $("#${data.menu_title.replace(/ /g, "")}-count").html(data.menu_count+"개");
+                                    }
+                                }
+                            })
+                            print_total_price(cart);
+                        })
+                        $("#${data.menu_title.replace(/ /g, "")}-plus").click(function () {
+                            cart.forEach((data) => {
+                                if ("${data.menu_title.replace(/ /g, "")}" == data.menu_title.replace(/ /g,"")) {
+                                    data.menu_count++;
+                                    $("#${data.menu_title.replace(/ /g, "")}-count").html(data.menu_count+"개");
+                                }
+                            })
+                            print_total_price(cart);
+                        })
+                     <\/script>`;
+                $("#cart-content").append(templete);
+            })
+        }
+
+        function print_count(menu_count) {
+            $("#count").html(menu_count);
+        }
+
+        function print_total_price(cart) {
+            var total_price = 0;
+
+            cart.forEach((result) => {
+                total_price += result.menu_price * result.menu_count;
+            })
+
+            if (total_price != 0) {
+                $("#do_order").attr("disabled", false);
+                $("#total_price").html(total_price + "원");
+                $("#total_price_done_order").html(total_price + "원");
+            }
+            else {
+                $("#do_order").attr("disabled", true);
+                $("#total_price").html("메뉴를 추가해주세요.");
+                $("#total_price_done_order").html("메뉴를 추가해주세요.");
+            }
+        }
+
+        function delete_cart(menu_title) {
+            cart.forEach((data, index) => {
+                if (data.menu_title == menu_title) {
+                    cart.splice(index, 1);
+                }
+            })
+
+            print_cart(cart);
+            print_total_price(cart);
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
