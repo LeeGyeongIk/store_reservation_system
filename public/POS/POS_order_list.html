@@ -13,7 +13,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js"></script>
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
@@ -25,13 +24,27 @@
         };
         firebase.initializeApp(firebaseConfig);
     </script>
-    <title>Document</title>
+    <title>주문 내역</title>
 </head>
 
 <body>
+    <div>
+        <a>주문 내역</a>
+    </div>
+    <div>
 
-    <a href="sms:01037225398&body=보낼메세지">SMS보내기</a>
+    </div>
+    <script>
+        const db = firebase.firestore();
 
+        db.collection("테스트").doc("test").collection("주문내역").doc("주문번호").collection("1번").onSnapshot((result) => {
+            result.forEach((doc) => {
+                console.log("data", doc.data());
+            })
+        }).catch((err) => {
+            console.log(err);
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>

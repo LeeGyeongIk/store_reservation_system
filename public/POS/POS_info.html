@@ -13,7 +13,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.8.0/firebase-messaging.js"></script>
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
@@ -25,13 +24,36 @@
         };
         firebase.initializeApp(firebaseConfig);
     </script>
-    <title>Document</title>
+    <title>POS 관리</title>
 </head>
 
 <body>
-
-    <a href="sms:01037225398&body=보낼메세지">SMS보내기</a>
-
+    <div style="background-color:beige">
+        <div class="container mt-3">
+        </div>
+    </div>
+    <div style="margin:0 auto;width:100%;height:100%">
+        <div style="margin-left:7%">
+            <button class="pos btn" id="order_info">주문 관리</button>
+            <button class="pos btn" id="table_info">테이블 관리</button>
+            <button class="pos btn" id="sales_info">매출 관리</button>
+            <button class="pos btn" id="reserve_info">예약 관리</button>
+        </div>
+    </div>
+    <script>
+        $("#order_info").click(function () {
+            window.location.href = "POS_info/POS_order_info.html";
+        })
+        $("#table_info").click(function () {
+            window.location.href = "POS_info/POS_table_info.html";
+        })
+        $("#sales_info").click(function () {
+            window.location.href = "POS_info/POS_sales_info.html";
+        })
+        $("#reserve_info").click(function () {
+            window.location.href = "POS_info/POS_reserve_info.html";
+        })
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
