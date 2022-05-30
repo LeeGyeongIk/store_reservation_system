@@ -29,41 +29,63 @@
 </head>
 
 <body>
-    <!--오프캔버스 레프트 사이드 메뉴바-->
-    <div class="offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width:15%;background-color: #d0a9fe">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">메뉴</h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="storemain.html">POS서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            메뉴관리
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" onclick="$('#offcanvasBottom').offcanvas('show')">메뉴추가</a></li>
+                            <li><a class="dropdown-item" onclick="alert('메뉴수정 또는 삭제를 원하시면 해당 메뉴를 클릭해주세요.')">메뉴수정 또는 삭제</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='order_sheet.html'">
+                            주문표
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="order_sheet_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='store_reservation_state.html'">
+                            예약현황
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="reservation_state_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='QRCODE.html'">
+                            QR코드
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="logout()">
+                            로그아웃
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="offcanvas-body">
-            <div style="cursor:pointer;" onclick="$('#offcanvasBottom').offcanvas('show')">
-                <hr style="height:2px">
-                <p>메뉴추가</p>
-            </div>
-            <div style="cursor:pointer;" onclick="alert('메뉴 수정 또는 삭제를 원하시면 해당 메뉴를 클릭하세요.')">
-                <hr style="height:2px">
-                <p>메뉴 수정 & 삭제</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='order_sheet.html'">
-                <hr style="height:2px">
-                <p>주문표</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='store_reservation_state.html'">
-                <hr style="height:2px">
-                <p>예약 현황</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='QRCODE.html'">
-                <hr style="height:2px">
-                <p>QR코드</p>
-            </div>
-            <div style="cursor:pointer;" onclick="logout()">
-                <hr style="height:2px">
-                <p>로그아웃</p>
-                <hr style="height:2px">
-            </div>
-        </div>
-    </div>
-    <!--오프캔버스 레프트 사이드 메뉴바-->
+    </nav>
 
     <!--오프캔버스 바텀 메뉴 추가 화면-->
     <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel"
@@ -158,21 +180,39 @@
 
     <!--기본 메뉴페이지 화면-->
     <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%">메뉴</div>
-        <div class="container mt-3" id="content-body">
-        </div>
+    <div class="container mt-3">
+        <div class="row" id="content-body"></div>
     </div>
+
     <script>
         const db = firebase.firestore();
+
+        db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("주문정보").onSnapshot((result) => {
+            var order_sheet_count = 0;
+            result.forEach((doc) => {
+                if (doc.data().준비 == false) {
+                    order_sheet_count++;
+                }
+            })
+            if (order_sheet_count == 0) {
+                $("#order_sheet_badge").attr("style", "display:none");
+            } else {
+                $("#order_sheet_badge").attr("style", "");
+                $("#order_sheet_badge").html(order_sheet_count);
+            }
+        })
 
         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("메뉴정보").get().then((result) => {
             result.forEach((doc) => {
                 var templete =
-                    `<div class="menu" onclick="menu_modify_or_delete('${doc.data().메뉴사진}','${doc.data().메뉴명}','${doc.data().메뉴가격}','${doc.data().메뉴정보}','${doc.id}')">
+                    `<div class="col-lg-4 col-md-6">
+                     <div class="menu" onclick="menu_modify_or_delete('${doc.data().메뉴사진}','${doc.data().메뉴명}','${doc.data().메뉴가격}','${doc.data().메뉴정보}','${doc.id}')">
                      <div class="thumbnail" style="background-image: url('${doc.data().메뉴사진}')"></div>
                      <div class="flex-grow-1 p-4">
                      <h5 class="menu_title">${doc.data().메뉴명}</h5>
                      <p class="menu_info">${doc.data().메뉴정보}</p>
                      <p class="menu_price">${doc.data().메뉴가격}원</p>
+                     </div>
                      </div>
                      </div>`;
                 $("#content-body").append(templete);

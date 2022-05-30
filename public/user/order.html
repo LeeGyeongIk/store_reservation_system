@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="order.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
@@ -39,9 +40,9 @@
         <div class="offcanvas-body" style="max-width:500px;width:100%;margin:0 auto">
             <div style="text-align:center;font-size:3em;margin-bottom:2%">장바구니</div>
             <hr>
-            <div style="text-align:center;padding:0px;overflow:scroll" class="offcanvas-body small" id="cart-content"></div>
-            <div
-                style="text-align:center;max-width:500px;width:100%;">
+            <div style="text-align:center;padding:0px;overflow:scroll" class="offcanvas-body small" id="cart-content">
+            </div>
+            <div style="text-align:center;max-width:500px;width:100%;">
                 <hr>
                 <h5><strong>총 주문금액</strong></h5>
                 <br>
@@ -54,6 +55,24 @@
         </div>
     </div>
     <!-- 오프캔버스 라이트 장바구니 -->
+
+    <!-- 오프캔버스 바텀 나중결제 내역 -->
+    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom-bill"
+        aria-labelledby="offcanvasBottomLabel" style="height:100%;background-color: #b8dbfd !important;">
+        <div class="offcanvas-header">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div style="text-align:center;font-size: 3em;margin-bottom:2%">나중결제 내역</div>
+            <div id="bill-content-body"></div>
+            <div style="max-width:500px;width:100%;margin: 0 auto">
+                <button type="button" class="btn btn-primary" id="bill-do-order"
+                    style="width:100%;margin-bottom:10px">주문하기</button>
+                <button type="button" class="btn btn-warning" id="bill-back-menu" style="width:100%">돌아가기</button>
+            </div>
+        </div>
+    </div>
+    <!-- 오프캔버스 바텀 나중결제 내역 -->
 
     <!--오프캔버스 라이트 메뉴 추가-->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight-add_menu"
@@ -93,9 +112,9 @@
                         </div>
                     </div>
                 </div>
-                <div style="display:flex;margin-top:10%;margin-bottom:20%">
+                <div style="display:flex;justify-content: center;margin-top:10%;margin-bottom:20%;">
                     <button type="button" class="btn btn-primary" id="minus">-</button>
-                    <label id="count" style="font-size: 3em;"></label>
+                    <label id="count" style="font-size: 3em;margin-left:10%;margin-right:10%"></label>
                     <button type="button" class="btn btn-primary" id="plus">+</button>
                 </div>
                 <button type="button" class="btn btn-primary" style="width:100%" id="add_menu">메뉴 추가</button>
@@ -104,26 +123,23 @@
     </div>
     <!--오프캔버스 라이트 메뉴 추가-->
 
-    <!-- 오프캔버스 바텀 주문완료 -->
-    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom-done-order"
-        aria-labelledby="offcanvasBottomLabel" style="height:100%">
-        <div class="offcanvas-header">
-        </div>
-        <div class="offcanvas-body small" style="text-align: center; padding:0px;overflow:scroll">
-            <div style="text-align:center;font-size: 2em;margin-bottom:3%" id="order_ready_title">주문이 완료되었습니다.</div>
-            <div style="text-align:center;font-size: 1.5em;margin-bottom:3%" id="order_ready_num">잠시만 기다려주세요.</div>
-            <hr>
-            <div id="done_order"></div>
-            <div style="text-align:center">
-                <hr>
-                <h5><strong>총 주문금액</strong></h5>
-                <br>
-                <div id="total_price_done_order" style="font-size:2em"></div>
-                <hr>
-            </div>
-        </div>
+    <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:10%">주문</div>
+    <div class="container mt-3" id="content-body">
+        <button id="cart-button" style="position:fixed;right:0;bottom:20%;border-radius:100%;width:80px;height:80px"><img
+                style="max-width:50px;max-height:50px;" src="cart.png" alt="">
+            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger" id="cart_count" style="display:none">
+                
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
+        <button id="bill-button" style="position:fixed;right:0;bottom:10%;border-radius:100%;width:80px;height:80px"><img
+                style="max-width:50px;max-height:50px;" src="bill.jpeg" alt="">
+            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger" id="bill_count" style="display:none">
+                
+                <span class="visually-hidden">unread messages</span>
+            </span>
+        </button>
     </div>
-    <!-- 오프캔버스 바텀 주문완료 -->
 
     <script>
         const db = firebase.firestore();
@@ -132,6 +148,7 @@
         //var store_id = "WyJDYIZTWhbxdUCr8WsO45KjVOl2";
         //var table_num = 1;
         var cart = new Array();
+        var bill = new Array();
 
         db.collection("매장").doc(store_id).collection("메뉴정보").get().then((result) => {
             result.forEach((doc) => {
@@ -147,13 +164,35 @@
                 $(".container").append(templete);
             })
         })
+
+        db.collection("매장").doc(store_id).collection("주문정보").get().then((result) => {
+            var bill_count = 0;
+            result.forEach((data) => {
+                if (data.data().결제여부 == false && data.data().주문테이블 == table_num) {
+                    var bill_add = data.data();
+                    bill_add.order_id = data.id;
+                    bill.push(bill_add);
+                    bill_count++;
+                    data.data().주문.forEach((doc) => {
+                        var templete =
+                            `<div class="bill">
+                             <div class="bill-menu-img" style="background-image: url('${doc.menu_img}')"></div>
+                             <div class="flex-grow-1 p-4">
+                             <h5 class="bill-menu-title">${doc.menu_title}</h5>
+                             <p class="bill-menu-info">${doc.menu_info}</p>
+                             <p class="bill-menu-price">${doc.menu_price}원</p>
+                             <p class="bill-menu-count">${doc.menu_count}개</p>
+                             </div>
+                             </div>`;
+                        $("#bill-content-body").append(templete);
+                    })
+                }
+            })
+            $("#bill_count").attr("style", "");
+            $("#bill_count").html(bill_count);
+        })
     </script>
 
-    <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%">주문</div>
-    <div class="container mt-3" id="content-body">
-        <button id="cart-button" style="position:fixed;right:0;bottom:10%;border-radius:100%"><img
-                style="max-width:50px;max-height:50px;" src="cart.png" alt=""></button>
-    </div>
     <script>
         var menu_img;
         var menu_title;
@@ -233,10 +272,61 @@
             print_cart(cart);
             print_total_price(cart);
             $("#offcanvasRight-add_menu").offcanvas("hide");
+            $("#cart_count").attr("style", "");
+            $("#cart_count").html(cart.length);
         })
 
         $("#cart-button").click(function () {
             $("#offcanvasRight-cart").offcanvas("show");
+        })
+
+        $("#bill-button").click(function () {
+            $("#offcanvasBottom-bill").offcanvas("show");
+        })
+
+        $("#back_menu").click(function () {
+            $("#offcanvasRight-cart").offcanvas("hide");
+        })
+
+        $("#bill-do-order").click(function () {
+            var item_name = "";
+            var item_price = 0;
+
+            bill.forEach((result) => {
+                result.주문.forEach((data) => {
+                    item_name += data.menu_title + " x " + data.menu_count + " "
+                    item_price += data.menu_price * data.menu_count;
+                })
+                db.collection("매장").doc(store_id).collection("주문정보").doc(result.order_id).update({
+                    결제여부: true
+                })
+            })
+
+            var IMP = window.IMP; // 생략 가능
+            IMP.init("imp17369910"); // 예: imp00000000
+            IMP.request_pay({ // param
+                pg: "html5_inicis",
+                pay_method: "card",
+                merchant_uid: new Date().getTime(),
+                name: item_name,
+                amount: item_price,
+                buyer_email: "ju741085@naver.com",
+                buyer_name: table_num + "번 테이블",
+                //buyer_tel: "01042424242",
+                //buyer_addr: "서울특별시 강남구 신사동",
+                //buyer_postcode: "01181",
+                m_redirect_url: window.location.href
+            }, function (rsp) { // callback
+                var msg;
+                if (rsp.success) {
+                    msg = "결제성공";
+                    window.location.href = window.location.href;
+                } else {
+                    msg = "결제취소";
+                    window.location.href = window.location.href;
+                }
+                alert(msg);
+            });
         })
 
         $("#do_order").click(function () {
@@ -256,36 +346,79 @@
                 $("#done_order").append(templete);
             })
 
-            var order = {
-                주문테이블: table_num,
-                주문: cart,
-                준비: false
-            };
-
-            db.collection("매장").doc(store_id).collection("테이블정보").doc(table_num.toString()).collection("주문정보").add(order).then((result) => {
-                $("#offcanvasBottom-done-order").offcanvas("show");
-                localStorage.setItem("order", result.id);
-            }).then(() => {
-                db.collection("매장").doc(store_id).collection("테이블정보").doc(table_num.toString()).collection("주문정보").doc(localStorage.getItem("order")).onSnapshot((doc) => {
-                    if (doc.data().준비 == true) {
-                        var audio = new Audio("alarm.mp3");
-                        audio.play();
-                        Swal.fire({
-                            icon: 'success',
-                            title: '주문하신 메뉴가 준비되었습니다.',
-                            text: '주문번호: ' + localStorage.getItem("order")
-                        });
-                        $("#order_ready_title").html("주문하신 메뉴가 준비되었습니다.");
-                        $("#order_ready_num").attr("style", "text-align:center;font-size: 2em;margin-bottom:2%");
-                        $("#order_ready_num").html("주문번호<br>" + localStorage.getItem("order"));
-                    }
-                })
+            Swal.fire({
+                icon: 'question',
+                title: '바로결제 하시겠습니까?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: '바로결제',
+                denyButtonText: '나중결제',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    is_pay_now(true);
+                } else if (result.isDenied) {
+                    is_pay_now(false);
+                }
             })
         })
 
-        $("#back_menu").click(function () {
-            $("#offcanvasRight-cart").offcanvas("hide");
-        })
+        function is_pay_now(pay) {
+            if (pay == true) {
+                var item_name = "";
+                var item_price = 0;
+                var order = {
+                    주문테이블: table_num,
+                    주문: cart,
+                    준비: false,
+                    결제여부: true
+                };
+
+                db.collection("매장").doc(store_id).collection("주문정보").add(order).then((result) => {
+                    cart.forEach((result) => {
+                        item_name += result.menu_title + " x " + result.menu_count + " ";
+                        item_price += result.menu_price * result.menu_count;
+                    })
+                    // IMP.request_pay(param, callback) 결제창 호출
+                    var IMP = window.IMP; // 생략 가능
+                    IMP.init("imp17369910"); // 예: imp00000000
+                    IMP.request_pay({ // param
+                        pg: "html5_inicis",
+                        pay_method: "card",
+                        merchant_uid: new Date().getTime(),
+                        name: item_name,
+                        amount: item_price,
+                        buyer_email: "ju741085@naver.com",
+                        buyer_name: table_num + "번 테이블",
+                        //buyer_tel: "01042424242",
+                        //buyer_addr: "서울특별시 강남구 신사동",
+                        //buyer_postcode: "01181",
+                        m_redirect_url: window.location.protocol + "//" + window.location.hostname + "/user/order_done.html?store_id=" + store_id + "&order_id=" + result.id + "&table_num=" + table_num
+                    }, function (rsp) { // callback
+                        var msg;
+                        if (rsp.success) {
+                            msg = "결제성공";
+                            window.location.href = "../user/order_done.html?store_id=" + store_id + "&order_id=" + result.id + "&table_num=" + table_num;
+                        } else {
+                            msg = "결제취소";
+                            window.location.href = "../user/order_done.html?store_id=" + store_id + "&order_id=" + result.id + "&table_num=" + table_num;
+                        }
+                        alert(msg);
+                    });
+                })
+            } else if (pay == false) {
+                var order = {
+                    주문테이블: table_num,
+                    주문: cart,
+                    준비: false,
+                    결제여부: false
+                };
+                db.collection("매장").doc(store_id).collection("주문정보").add(order).then((result) => {
+                    window.location.href = "../user/order_done.html?store_id=" + store_id + "&order_id=" + result.id + "&table_num=" + table_num;
+                })
+            }
+        }
 
         function print_cart(cart) {
             $("#cart-content").empty();
@@ -296,9 +429,9 @@
                      <h5>${data.menu_title}</h5>
                      <p>${data.menu_info}</p>
                      <h5>${data.menu_price}원</h5>
-                     <div style="display:flex">
+                     <div style="display:flex;justify-content: center;margin-top:5%">
                      <button type="button" class="btn btn-primary" id="${data.menu_title.replace(/ /g, "")}-minus" style="display:flex">-</button>
-                     <h5 id="${data.menu_title.replace(/ /g, "")}-count">${data.menu_count}개</h5>
+                     <h5 id="${data.menu_title.replace(/ /g, "")}-count" style="font-size: 2em;margin-left:10%;margin-right:10%">${data.menu_count}개</h5>
                      <button type="button" class="btn btn-primary" id="${data.menu_title.replace(/ /g, "")}-plus">+</button>
                      </div>
                      </div>
@@ -362,7 +495,6 @@
             print_cart(cart);
             print_total_price(cart);
         }
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

@@ -29,65 +29,108 @@
 </head>
 
 <body>
-    <div class="offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width:15%;background-color: #b8dbfd">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">메뉴</h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="usermain.html">매장예약서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link active" aria-current="page" href="usermain.html">매장</a> -->
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='usermain.html'">
+                            매장
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='user_reservation_state.html'">
+                            예약현황
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="reservation_state_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='userinfo.html'">
+                            내 정보
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="logout()">
+                            로그아웃
+                        </button>
+                    </li>
+            </div>
         </div>
-        <div class="offcanvas-body">
-            <div style="cursor:pointer;" onclick="window.location.href='usermain.html'">
-                <hr style="height:2px">
-                <p>매장 보기</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='user_reservation_state.html'">
-                <hr style="height:2px">
-                <p>예약 현황</p>
-            </div>
-            <div style="cursor:pointer;" onclick="logout()">
-                <hr style="height:2px">
-                <p>로그아웃</p>
-                <hr style="height:2px">
-            </div>
-        </div>
-    </div>
+    </nav>
 
     <h1 id="head" style="text-align:center;margin-top:5%;margin-bottom:3.5%"></h1>
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel"
-        style="width:50%">
-        <div class="offcanvas-header">
+        style="width:100%">
+        <div class="offcanvas-header" style="max-width:500px;width:100%;margin-bottom:20px;margin: 0 auto">
             <h5 id="offcanvasRightLabel">예약 상세정보</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
-            <img src="dummy_image.jpeg" style="width:100%;max-height:400px;height:100%;margin-bottom:15px;border: 1px solid gainsboro"
+        <div class="offcanvas-body" style="max-width:500px;width:100%;margin-bottom:20px;margin: 0 auto">
+            <img src="dummy_image.jpeg" style="width:100%;margin-bottom:15px;border: 1px solid gainsboro"
                 id="store_img">
-            <div class="accordion" id="accordionExample" style="margin-bottom:15px">
+            <div class="accordion" id="accordion1" style="margin-bottom:15px">
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
+                    <h2 class="accordion-header" id="heading1">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
                             매장 소개
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                        data-bs-parent="#accordionExample">
+                    <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="heading1"
+                        data-bs-parent="#accordion1">
                         <div class="accordion-body" id="store_info">
 
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="accordion" id="accordionExample" style="margin-bottom:30px">
+            <div class="accordion" id="accordion2" style="margin-bottom:15px">
                 <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
+                    <h2 class="accordion-header" id="heading2">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            data-bs-target="#collapse2" aria-expanded="true" aria-controls="collapse2">
+                            예약 일자
+                        </button>
+                    </h2>
+                    <div id="collapse2" class="accordion-collapse collapse show" aria-labelledby="heading2"
+                        data-bs-parent="#accordion2">
+                        <div class="accordion-body">
+                            <strong>예약일</strong>
+                            <br>
+                            <div id="reservate_date"></div>
+                            <br>
+                            <strong>예약시간</strong>
+                            <br>
+                            <div id="reservate_time"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion" id="accordion3" style="margin-bottom:30px">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading3">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
                             예약자 정보
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                        data-bs-parent="#accordionExample">
+                    <div id="collapse3" class="accordion-collapse collapse show" aria-labelledby="heading3"
+                        data-bs-parent="#accordion3">
                         <div class="accordion-body">
                             <strong>예약자</strong>
                             <br>
@@ -104,21 +147,86 @@
                     </div>
                 </div>
             </div>
-            <button type="button" class="btn btn-danger btn-lg" id="reservation_cancel" style="width:100%">예약
-                취소</button>
+            <button type="button" class="btn btn-success btn-lg" id="reservation_back"
+                style="width:100%;margin-bottom:10px">돌아가기</button>
+            <button type="button" class="btn btn-danger btn-lg" id="reservation_cancel" style="width:100%">예약취소</button>
         </div>
     </div>
 
     <div class="container mt-3">
+        <div class="row" id="content-body"></div>
+    </div>
 
+    <div style="max-width:500px;margin: 0 auto" id="loading">
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-2"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-2"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+        </p>
     </div>
 
     <script>
         const db = firebase.firestore();
         var reserved_info = [];
 
+        db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").onSnapshot((result) => {
+            var reservation_state_count = 0;
+            result.forEach((doc) => {
+                reservation_state_count++;
+            })
+            $("#reservation_state_badge").attr("style", "");
+            $("#reservation_state_badge").html(reservation_state_count);
+        })
+
         db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").onSnapshot((reserved) => {
-            $(".container").html("");
+            $("#content-body").html("");
             reserved_info = [];
             reserved.forEach((doc) => {
                 reserved_info.push(doc);
@@ -136,24 +244,31 @@
             if (data.length == 0) {
                 $("#head").html("예약 정보가 없어요.");
             } else {
-                $("#head").html(data.length+"건의 예약이 있어요.");
+                $("#head").html(data.length + "건의 예약이 있어요.");
                 data.forEach((doc) => {
                     db.collection("매장").doc(doc.data().매장uid).get().then((result) => {
                         var templete =
-                        `<div class="reservation" onclick="selected_reservation_id='${doc.id}';selected_reservation_store_uid='${doc.data().매장uid}';reserved_day='${doc.data().예약일}';reserved_time='${doc.data().예약시간}';show_offcanvas('${result.data().매장사진}','${result.data().매장정보}')">
-                         <div class="thumbnail" style="background-image: url('${result.data().매장사진}')"></div>
-                         <div class="flex-grow-1 p-4">
-                         <h5 class="store_name">${result.data().매장이름}</h5>
-                         <p class="date">${doc.data().예약일} | ${doc.data().예약시간}</p>
-                         </div>
-                         </div>`;
-                        $(".container").append(templete);
+                            `<div class="col-lg-4 col-md-6">
+                             <div class="reservation" onclick="selected_reservation_id='${doc.id}';selected_reservation_store_uid='${doc.data().매장uid}';reserved_day='${doc.data().예약일}';reserved_time='${doc.data().예약시간}';show_offcanvas('${result.data().매장사진}','${result.data().매장정보}','${doc.data().예약일}','${doc.data().예약시간}')">
+                             <div class="thumbnail" style="background-image: url('${result.data().매장사진}')"></div>
+                             <div class="flex-grow-1 p-4">
+                             <h5 class="store_name">${result.data().매장이름}</h5>
+                             <p class="date">${doc.data().예약일} | ${doc.data().예약시간}</p>
+                             </div>
+                             </div>
+                             </div>`;
+                        $("#content-body").append(templete);
                     })
+                    $("#loading").attr("style", "display:none");
                 })
             }
         }
     </script>
     <script>
+        $("#reservation_back").click(function () {
+            $("#offcanvasRight").offcanvas("hide");
+        })
+
         $("#reservation_cancel").click(function () {
             db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").doc(selected_reservation_id).delete().then(() => {
                 db.collection("매장").doc(selected_reservation_store_uid).collection("예약정보").doc(reserved_day).update({
@@ -166,9 +281,11 @@
         })
     </script>
     <script>
-        function show_offcanvas(store_img, store_info) {
+        function show_offcanvas(store_img, store_info, reservate_date, reservate_time) {
             $("#store_img").attr("src", store_img);
             $("#store_info").html(store_info);
+            $("#reservate_date").html(reservate_date);
+            $("#reservate_time").html(reservate_time);
             $("#name").html(localStorage.getItem("username").split("&")[0]);
             $("#phone").html(localStorage.getItem("username").split("&")[1]);
             $("#email").html(localStorage.getItem("useremail"));

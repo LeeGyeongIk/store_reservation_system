@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="./components/enc-base64.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-messaging.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBzWGqNmb6KazuZB_ykjg1zkS-YWSaFFBk",
+            authDomain: "store-reservation-system.firebaseapp.com",
+            projectId: "store-reservation-system",
+            storageBucket: "store-reservation-system.appspot.com",
+            messagingSenderId: "734537126957",
+            appId: "1:734537126957:web:5d84d462476d77ddbbd4a4"
+        };
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <title>Document</title>
+</head>
+
+<body>
+    <button id="send_message">send_message</button>
+
+    <script>
+        const messaging = firebase.messaging();
+
+        messaging.getToken({ vapidKey: 'oePb7MeGMqcZyyJ8I8ZDk1nb-1WIPGGN5uJSGRelX0E' }).then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken);
+                // Send the token to your server and update the UI if necessary
+                // ...
+            } else {
+                // Show permission request UI
+                console.log('No registration token available. Request permission to generate one.');
+                // ...
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+            // ...
+        });
+    </script>
+
+    <!-- <script>
+        $("#send_message").click(function () {
+            let timestamp = new Date().getTime();
+            $.ajax({
+                type: 'POST',
+                url: 'https://sens.apigw.ntruss.com/sms/v2/services/ncp:sms:kr:283399960131:store_reservation_system/messages',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8d',
+                    'x-ncp-apigw-timestamp': timestamp.toString(),
+                    'x-ncp-iam-access-key': 'cIwMSA071UAG5IhJ3VGG',
+                    'x-ncp-apigw-signature-v2': makeSignature(timestamp.toString())
+                },
+                data: {
+                    'type': 'SMS',
+                    "countryCode": "82",
+                    "from": "01037225398",
+                    "subject": "SMS-TEST",
+                    "contentType": "COMM",
+                    "content": "SENS",
+                    "message": [
+                        {
+                            "subject": "test",
+                            "content": "test",
+                            "to": "01037225398"
+                        }
+                    ]
+                },
+                success: alert("전송성공")
+            });
+        })
+    </script>
+    <script>
+        function makeSignature(time) {
+            var space = " ";				// one space
+            var newLine = "\n";				// new line
+            var method = "GET";				// method
+            var url = "/sms/v2/services/";	// url (include query string)
+            var timestamp = time;			// current timestamp (epoch)
+            var accessKey = "cIwMSA071UAG5IhJ3VGG";			// access key id (from portal or Sub Account)
+            var secretKey = "vGPparPQbl5O4hStXb9ProhOWE7XdhFsuo3mQz1k";			// secret key (from portal or Sub Account)
+
+            var hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretKey);
+            hmac.update(method);
+            hmac.update(space);
+            hmac.update(url);
+            hmac.update(newLine);
+            hmac.update(timestamp);
+            hmac.update(newLine);
+            hmac.update(accessKey);
+
+            var hash = hmac.finalize();
+
+            return hash.toString(CryptoJS.enc.Base64);
+        }
+    </script> -->
+</body>
+
+</html>

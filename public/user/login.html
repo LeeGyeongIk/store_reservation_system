@@ -52,9 +52,22 @@
             </div>
         </div>
     </div>
-    <div style="text-align:center"><a href="../store/login.html" style="text-decoration:none;color:black">사업자로 로그인하기</a></div>
-    
+    <div style="text-align:center"><a href="../store/login.html" style="text-decoration:none;color:black">사업자로 로그인하기</a>
+    </div>
+
     <script>
+        $("#email").keydown(function (key) {
+            if (key.keyCode == 13) {
+                $("#login").trigger("click");
+            }
+        });
+
+        $("#password").keydown(function (key) {
+            if (key.keyCode == 13) {
+                $("#login").trigger("click");
+            }
+        });
+
         $("#login").click(function () {
             var email = $("#email").val();
             var password = $("#password").val();

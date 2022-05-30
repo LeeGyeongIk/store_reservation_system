@@ -29,49 +29,68 @@
 </head>
 
 <body>
-    <div class="offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width:15%;background-color: #d0a9fe">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">메뉴</h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="storemain.html">POS서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="window.location.href='menu.html'">
+                            메뉴관리
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='order_sheet.html'">
+                            주문표
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="order_sheet_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='store_reservation_state.html'">
+                            예약현황
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="reservation_state_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='QRCODE.html'">
+                            QR코드
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="logout()">
+                            로그아웃
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="offcanvas-body">
-            <div style="cursor:pointer;" onclick="window.location.href='store_reservation_state.html'">
-                <hr style="height:2px">
-                <p>예약 현황</p>
-            </div>
-            <div style="cursor:pointer;" onclick="alert('예약 취소를 원하시면 해당 예약을 클릭하세요.')">
-                <hr style="height:2px">
-                <p>예약 취소</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='order_sheet.html'">
-                <hr style="height:2px">
-                <p>주문표</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='menu.html'">
-                <hr style="height:2px">
-                <p>메뉴 관리</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='QRCODE.html'">
-                <hr style="height:2px">
-                <p>QR코드</p>
-            </div>
-            <div style="cursor:pointer;" onclick="logout()">
-                <hr style="height:2px">
-                <p>로그아웃</p>
-                <hr style="height:2px">
-            </div>
-        </div>
-    </div>
+    </nav>
 
     <h1 id="head" style="text-align:center;margin-top:5%;margin-bottom:3.5%"></h1>
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel"
-        style="width:50%">
+        style="width:30%">
         <div class="offcanvas-header">
             <h5 id="offcanvasRightLabel">예약 상세정보</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body">
+        <div class="offcanvas-body" style="max-width:500px;width:100%;margin: 0 auto">
             <div class="accordion" id="accordionExample" style="margin-bottom:15px">
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingOne">
@@ -126,7 +145,7 @@
     </div>
 
     <div class="container mt-3" style="text-align:center">
-
+        <div id="reservation_content" class="row"></div>
     </div>
 
     <script>
@@ -134,8 +153,23 @@
         var reserved_info = [];
         var count = 0;
 
+        db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("주문정보").onSnapshot((result) => {
+            var order_sheet_count = 0;
+            result.forEach((doc) => {
+                if (doc.data().준비 == false) {
+                    order_sheet_count++;
+                }
+            })
+            if (order_sheet_count == 0) {
+                $("#order_sheet_badge").attr("style", "display:none");
+            } else {
+                $("#order_sheet_badge").attr("style", "");
+                $("#order_sheet_badge").html(order_sheet_count);
+            }
+        })
+
         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("예약정보").onSnapshot((reserved) => {
-            $(".container").html("");
+            $("#reservation_content").html("");
             reserved_info = [];
             count = 0;
             reserved.forEach((doc) => {
@@ -156,13 +190,15 @@
                     if (doc.data()[i] != false) {
                         count++;
                         var templete =
-                            `<div class="reservation" onclick="day='${doc.data()[i].예약일}';time='${doc.data()[i].예약시간}';user_uid='${doc.data()[i].예약자uid}';selected_reservation_id='${doc.data()[i].예약번호}';show_offcanvas('${doc.data()[i].예약자이름}','${doc.data()[i].예약자전화번호}','${doc.data()[i].예약자이메일}','${doc.data()[i].예약일}','${doc.data()[i].예약시간}')">
+                            `<div class="col-lg-4 col-md-6">
+                             <div class="reservation" onclick="day='${doc.data()[i].예약일}';time='${doc.data()[i].예약시간}';user_uid='${doc.data()[i].예약자uid}';selected_reservation_id='${doc.data()[i].예약번호}';show_offcanvas('${doc.data()[i].예약자이름}','${doc.data()[i].예약자전화번호}','${doc.data()[i].예약자이메일}','${doc.data()[i].예약일}','${doc.data()[i].예약시간}')">
                              <div class="flex-grow-1 p-4">
                              <h5 class="user_name">${doc.data()[i].예약자이름}</h5>
                              <p class="date">${doc.data()[i].예약일} | ${doc.data()[i].예약시간}</p>
                              </div>
+                             </div>
                              </div>`;
-                        $(".container").append(templete);
+                        $("#reservation_content").append(templete);
                     }
                 }
             })

@@ -28,22 +28,98 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="usermain.html">매장예약서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link active" aria-current="page" href="usermain.html">매장</a> -->
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='usermain.html'">
+                            매장
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='user_reservation_state.html'">
+                            예약현황
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="reservation_state_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='userinfo.html'">
+                            내 정보
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="logout()">
+                            로그아웃
+                        </button>
+                    </li>
+            </div>
+        </div>
+    </nav>
+
+    <div style="text-align:center;font-size: 3em;margin-top:5%;">내 정보</div>
+    <div class="container mt-3"
+        style="max-width:500px;width:100%;margin: 0 auto;border: 1px solid gainsboro;border-radius: 10px;margin-bottom:2%">
+        <div style="padding:3%">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="Name" style="max-width:500px;width:100%" disabled readonly>
+                <label for="floatingInput">Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="phone" placeholder="Phone"
+                    style="max-width:500px;width:100%" disabled readonly>
+                <label for="floatingInput">Phone</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                    style="max-width:500px;width:100%" disabled readonly>
+                <label for="floatingInput">Email address</label>
+            </div>
+        </div>
+    </div>
+    <div style="max-width:500px;width:100%;margin: 0 auto">
+        <button type="submit" class="btn btn-primary btn-sm" id="back" style="width:100%">돌아가기</button>
+    </div>
+    
     <script>
-        document.write("사용자 이름 " + localStorage.getItem("username") + "<br>");
-        document.write("사용자 이메일 " + localStorage.getItem("useremail") + "<br>");
-        document.write("사용자 전화번호 " + localStorage.getItem("usercall") + "<br>");
+        const db = firebase.firestore();
+
+        db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").onSnapshot((result) => {
+            var reservation_state_count = 0;
+            result.forEach((doc) => {
+                reservation_state_count++;
+            })
+            $("#reservation_state_badge").attr("style", "");
+            $("#reservation_state_badge").html(reservation_state_count);
+        })
+
+        $("#name").val(localStorage.getItem("username").split("&")[0]);
+        $("#phone").val(localStorage.getItem("username").split("&")[1]);
+        $("#email").val(localStorage.getItem("useremail"));
+        $("#back").click(function () {
+            window.location.href = "usermain.html";
+        })
     </script>
-    <button type="submit" class="btn btn-primary" id="logout">로그아웃</button>
     <script>
-        $("#logout").click(function () {
-            firebase.auth().signOut().then((result) => {
-                localStorage.removeItem("username");
-                localStorage.removeItem("usercall");
-                localStorage.removeItem("useremail");
-                alert("로그아웃 하셨습니다.");
+        function logout() {
+            firebase.auth().signOut().then(() => {
                 window.location.href = "login.html";
             });
-        })
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

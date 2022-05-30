@@ -1,52 +1,60 @@
-  .container {
-    max-width: 530px;
-    width: 100%;
-    margin: 0 auto;
-  }
-  .reservation {
-      display: flex;
-      background-color:beige;
-      max-width: 500px;
-      max-height: 200px;
-      width: 100%;
-      height: 100%;
-      margin: 0 auto;
-      margin-bottom: 5px;
-      cursor: pointer;
-    }
-  .thumbnail {
-    margin: 20px;
-    max-width: 200px;
-    width: 100%;
-    height: 150px;
-    border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-  }
-  .reservation .store_location {
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .reservation .store_name {
-    font-size: 17px;
-    font-weight: 600;
-    margin-top: 20%;
-  }
-  .reservation .date {
-    color: grey;
-    font-size: 13px;
-  }
-  .detail-pic {
-    max-width: 500px;
-    max-height: 300px;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-  } 
-  .container .category-group {
-    max-width: 250px;
-    width: 100%;
-    margin: 0 auto;
-    margin-bottom: 20px;
-  }
+body {
+  background-color: #b8dbfd !important;
+}
+
+.container {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.reservation {
+  display: flex;
+  cursor: pointer;
+  max-width: 500px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  margin-bottom: 8%;
+  /* background-color:lightgreen; */
+  /* background-color:lightpink; */
+  /* background-color: tomato; */
+  background-color: white;
+  border-radius: 5%;
+}
+
+.thumbnail {
+  margin: 20px;
+  max-width: 200px;
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+.reservation .store_location {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.reservation .store_name {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 20%;
+}
+
+.reservation .date {
+  color: grey;
+  font-size: 13px;
+}
+
+.detail-pic {
+  max-width: 500px;
+  max-height: 300px;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}

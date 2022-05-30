@@ -29,52 +29,144 @@
 </head>
 
 <body>
-    <div class="offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="width:15%;background-color: #b8dbfd">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">메뉴</h5>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="usermain.html">매장예약서비스</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <!-- <a class="nav-link active" aria-current="page" href="usermain.html">매장</a> -->
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='usermain.html'">
+                            매장
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='user_reservation_state.html'">
+                            예약현황
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="reservation_state_badge" style="display:none">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='userinfo.html'">
+                            내 정보
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative" onclick="logout()">
+                            로그아웃
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="offcanvas-body">
-            <div style="cursor:pointer;" onclick="window.location.href='usermain.html'">
-                <hr style="height:2px">
-                <p>매장 보기</p>
-            </div>
-            <div style="cursor:pointer;" onclick="window.location.href='user_reservation_state.html'">
-                <hr style="height:2px">
-                <p>예약 현황</p>
-            </div>
-            <div style="cursor:pointer;" onclick="logout()">
-                <hr style="height:2px">
-                <p>로그아웃</p>
-                <hr style="height:2px">
-            </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="search" style="margin: 0 auto;margin-bottom: 3%;max-width:500px;width:100%">
+            <input type="text" placeholder="매장명을 입력하세요" id="searchbox" onkeyup="vacuum()">
+            <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="searchimg" onclick="filter()">
         </div>
+        <div class="category-group" style="margin-bottom:5%">
+            <input type="radio" class="btn-check" name="options-outlined" id="none" autocomplete="off">
+            <label class="btn btn-outline-success" for="none">없음</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="cafe" autocomplete="off">
+            <label class="btn btn-outline-success" for="cafe">카페</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="restaurant" autocomplete="off">
+            <label class="btn btn-outline-success" for="restaurant">식당</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="convenience" autocomplete="off">
+            <label class="btn btn-outline-success" for="convenience">편의점</label>
+        </div>
+        <div class="row" id="content-body"></div>
     </div>
-    <div>
-        <div class="container mt-3">
-            <div class="searchbox">
-                <input onkeyup="vacuum()" type="text" id="keyword" placeholder="Search">
-                <button id="search_button" onclick="filter()">search</button>
-            </div>
-            <div class="category-group">
-                <input type="radio" class="btn-check" name="options-outlined" id="none" autocomplete="off">
-                <label class="btn btn-outline-success" for="none">없음</label>
 
-                <input type="radio" class="btn-check" name="options-outlined" id="cafe" autocomplete="off">
-                <label class="btn btn-outline-success" for="cafe">카페</label>
-
-                <input type="radio" class="btn-check" name="options-outlined" id="restaurant" autocomplete="off">
-                <label class="btn btn-outline-success" for="restaurant">식당</label>
-
-                <input type="radio" class="btn-check" name="options-outlined" id="convenience" autocomplete="off">
-                <label class="btn btn-outline-success" for="convenience">편의점</label>
-            </div>
-        </div>
+    <div style="max-width:500px;margin: 0 auto" id="loading">
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-2"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-8"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-6"></span>
+            <span class="placeholder col-7"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+        </p>
+        <p class="card-text placeholder-glow">
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-2"></span>
+            <span class="placeholder col-4"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-3"></span>
+            <span class="placeholder col-8"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+            <span class="placeholder col-12"></span>
+        </p>
     </div>
 
     <script>
         const db = firebase.firestore();
         var store_info = [];
+
+        $("#searchbox").keydown(function (key) {
+            if (key.keyCode == 13) {
+                $("#searchimg").trigger("click");
+            }
+        });
+
+        db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").onSnapshot((result) => {
+            var reservation_state_count = 0;
+            result.forEach((doc) => {
+                reservation_state_count++;
+            })
+            $("#reservation_state_badge").attr("style", "");
+            $("#reservation_state_badge").html(reservation_state_count);
+        })
 
         db.collection("매장").get().then((store) => {
             store.forEach((doc) => {
@@ -86,11 +178,11 @@
 
     <script>
         function filter() {
-            var keyword = document.getElementById("keyword").value;
+            $("#content-body").empty();
             var search_store = [];
 
             store_info.forEach((doc) => {
-                if (doc.data().매장이름.includes(keyword)) {
+                if (doc.data().매장이름.includes($("#searchbox").val())) {
                     search_store.push(doc);
                 }
             })
@@ -114,6 +206,7 @@
         })
 
         function category_search(category_temp) {
+            $("#content-body").empty();
             var category = [];
 
             store_info.forEach((doc) => {
@@ -121,16 +214,14 @@
                     category.push(doc);
                 }
             })
-            document.getElementById("keyword").value = "";
+            $("#searchbox").val("");
             initApp(category);
         }
     </script>
 
     <script>
         function vacuum() {
-            var text = document.getElementById("keyword").value;
-
-            if (text == "") {
+            if ($("#searchbox").val() == "") {
                 initApp(store_info);
             }
         }
@@ -138,19 +229,22 @@
 
     <script>
         function initApp(data) {
-            $(".store").empty();
+            $("#content-body").empty();
             data.forEach((doc) => {
                 var templete =
-                    `<div class="store" onclick="window.location.href='reservation.html?id=${doc.id}'">
+                    `<div class="col-lg-4 col-md-6">
+                     <div class="store" onclick="window.location.href='reservation.html?id=${doc.id}'">
                      <div class="thumbnail" style="background-image: url('${doc.data().매장사진}')"></div>
                      <div class="flex-grow-1 p-4">
                      <h5 class="store_name">${doc.data().매장이름}</h5>
-                     <p class="date">2030년 1월 8일</p>
+                     <hr style="height:2%">
                      <p class="store_location">${doc.data().위치정보.split("&")[0]}</p>
                      </div>
+                     </div>
                      </div>`;
-                $(".container").append(templete);
+                $("#content-body").append(templete);
             })
+            $("#loading").attr("style", "display:none");
         }
     </script>
 
@@ -161,7 +255,7 @@
             });
         }
     </script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
