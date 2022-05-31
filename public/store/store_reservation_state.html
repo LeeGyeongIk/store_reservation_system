@@ -151,7 +151,6 @@
     <script>
         const db = firebase.firestore();
         var reserved_info = [];
-        var count = 0;
 
         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("주문정보").onSnapshot((result) => {
             var order_sheet_count = 0;
@@ -171,7 +170,6 @@
         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("예약정보").onSnapshot((reserved) => {
             $("#reservation_content").html("");
             reserved_info = [];
-            count = 0;
             reserved.forEach((doc) => {
                 reserved_info.push(doc);
             })
@@ -185,6 +183,7 @@
         var selected_reservation_id;
 
         function initApp(data) {
+            var count = 0;
             data.forEach((doc) => {
                 for (var i in doc.data()) {
                     if (doc.data()[i] != false) {
@@ -205,8 +204,11 @@
 
             if (count == 0) {
                 $("#head").html("예약 정보가 없어요.");
+                $("#reservation_state_badge").attr("style", "display:none");
             } else {
                 $("#head").html(count + "건의 예약이 있어요.");
+                $("#reservation_state_badge").attr("style", "");
+                $("#reservation_state_badge").html(count);
             }
         }
     </script>

@@ -1,75 +1,71 @@
-#keyword {
-    border: none;
-    background: #E0D3B6;
-    padding: 6px;
-    font-size: 18px;
-    width: 85%;
-    border-radius: 6px;
-    color: white;
-  }
-  #keyword:focus {
-    outline: none;
-  }
-  #search_button {
-    border: none;
-    background: #E0D3B6;
-    padding: 8px;
-    color: white;
-    width: auto;
-    height: auto;
-    cursor: pointer;
-  }
-  .container {
-    max-width: 530px;
-    width: 100%;
-    margin: 0 auto;
-  }
-  .store {
-      display: flex;
-      background-color:beige;
-      cursor: pointer;
-      max-width: 500px;
-      max-height: 200px;
-      width: 100%;
-      height: 100%;
-      margin: 0 auto;
-      margin-bottom: 5px;
-    }
-  .thumbnail {
-    margin: 20px;
-    max-width: 200px;
-    width: 100%;
-    border-radius: 10px;
-    background-size: cover;
-    background-position: center;
-  }
-  .store .store_location {
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .store .store_name {
-    font-size: 17px;
-    font-weight: 600;
-  }
-  .store .date {
-    color: grey;
-    font-size: 13px;
-  }
-  .detail-pic {
-    max-width: 500px;
-    max-height: 300px;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-  } 
-  .container .category-group {
-    max-width: 250px;
-    width: 100%;
-    margin: 0 auto;
-    margin-bottom: 20px;
-  }
-  .btn {
-    margin: 0 auto;
-    display: block;
-  }
+body {
+  background-color: #b8dbfd !important;
+}
+
+.order {
+  max-width: 200px;
+  min-height: 200px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  /* background-color:lightgreen; */
+  /* background-color:lightpink; */
+  /* background-color: tomato; */
+  background-color: white;
+  border-radius: 5%;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  max-width: 500px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  margin-bottom: 5%;
+  /* background-color:lightgreen; */
+  /* background-color:lightpink; */
+  /* background-color: tomato; */
+  background-color: white;
+  border-radius: 5%;
+}
+
+.thumbnail {
+  margin: 20px;
+  max-width: 200px;
+  width: 100%;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+}
+
+.menu_price {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.menu_count {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.menu_title {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.menu_title_main {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+
+.menu_info {
+  color: grey;
+  font-size: 13px;
+}

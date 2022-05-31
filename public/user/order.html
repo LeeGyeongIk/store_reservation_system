@@ -125,17 +125,20 @@
 
     <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:10%">주문</div>
     <div class="container mt-3" id="content-body">
-        <button id="cart-button" style="position:fixed;right:0;bottom:20%;border-radius:100%;width:80px;height:80px"><img
+        <button id="cart-button"
+            style="position:fixed;right:0;bottom:20%;border-radius:100%;width:80px;height:80px;margin-bottom:2%"><img
                 style="max-width:50px;max-height:50px;" src="cart.png" alt="">
-            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger" id="cart_count" style="display:none">
-                
+            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger"
+                id="cart_count" style="display:none">
+
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
-        <button id="bill-button" style="position:fixed;right:0;bottom:10%;border-radius:100%;width:80px;height:80px"><img
+        <button id="bill-button"
+            style="position:fixed;right:0;bottom:10%;border-radius:100%;width:80px;height:80px"><img
                 style="max-width:50px;max-height:50px;" src="bill.jpeg" alt="">
-            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger" id="bill_count" style="display:none">
-                
+            <span class="position-absolute top-0 start-150 translate-middle badge rounded-pill bg-danger"
+                id="bill_count" style="display:none">
                 <span class="visually-hidden">unread messages</span>
             </span>
         </button>
@@ -188,8 +191,12 @@
                     })
                 }
             })
-            $("#bill_count").attr("style", "");
-            $("#bill_count").html(bill_count);
+            if (bill_count == 0) {
+                $("#bill_count").attr("style", "");
+            } else {
+                $("#bill_count").attr("style", "");
+                $("#bill_count").html(bill_count);
+            }
         })
     </script>
 

@@ -202,6 +202,15 @@
             }
         })
 
+        db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("예약정보").onSnapshot((reserved) => {
+            $("#reservation_content").html("");
+            reserved_info = [];
+            reserved.forEach((doc) => {
+                reserved_info.push(doc);
+            })
+            initApp(reserved_info);
+        })
+
         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).collection("메뉴정보").get().then((result) => {
             result.forEach((doc) => {
                 var templete =
@@ -220,6 +229,26 @@
         })
     </script>
     <!--기본 메뉴페이지 화면-->
+
+    <script>
+        function initApp(data) {
+            var count = 0;
+            data.forEach((doc) => {
+                for (var i in doc.data()) {
+                    if (doc.data()[i] != false) {
+                        count++;
+                    }
+                }
+            })
+
+            if (count == 0) {
+                $("#reservation_state_badge").attr("style", "display:none");
+            } else {
+                $("#reservation_state_badge").attr("style", "");
+                $("#reservation_state_badge").html(count);
+            }
+        }
+    </script>
 
     <!--오프캔버스 바텀 메뉴 추가 화면-->
     <script>
