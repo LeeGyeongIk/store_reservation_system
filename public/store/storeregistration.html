@@ -33,8 +33,12 @@
             <label for="floatingInput">매장명</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="table_count" placeholder="매장명">
+            <input type="text" class="form-control" id="table_count" placeholder="테이블 수">
             <label for="floatingInput">테이블 수</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="max_reservation_count" placeholder="최대예약갯수">
+            <label for="floatingInput">최대예약갯수</label>
         </div>
         <div class="form-floating" style="margin-bottom:15px">
             <select class="form-select" id="category" aria-label="Floating label select example">
@@ -191,6 +195,7 @@
                             업종: $("#category option:selected").val(),
                             위치정보: $("#storelocation").val() + "&" + location_temp.lat + "&" + location_temp.lng,
                             테이블갯수: Number($("#table_count").val()),
+                            최대예약갯수: Number($("#max_reservation_count").val()),
                             편의시설: amenities
                         };
                         db.collection("매장").doc(localStorage.getItem("entrepreneur_uid")).set(store_info).then(() => {

@@ -1,0 +1,176 @@
+body{
+    background-color: #b8dafd93;
+}
+.POS{
+    display: grid;
+    width: 100vw;
+    height: 90vh;
+}
+.container{
+    padding: 0.5%;
+    width: 70vw;
+    height: 100%;
+    display: grid;
+    float: left;
+    grid-template-columns: repeat(4,1fr);
+    overflow: scroll;
+}
+.table_div{
+    position: relative;
+    margin: 3%;
+    padding: 5%;
+    display: table;
+    float: left;
+    height:30vh;
+    border-radius: 5%;
+    background-color: #fcfbf8;
+}
+.table_num{
+    display: table-row;
+    height: fit-content;
+    font-size: 13pt;
+}
+.table_menu{
+    display: table-row;
+    vertical-align: middle;
+    border-top:3%;
+    overflow: scroll;
+}
+.menu_title{
+    width: 55%;
+    margin-left: 5%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float: left;
+}
+.menu_count{
+    min-width: 35%;
+    margin-right: 5%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    float : right;
+}
+.table_price{
+    display: table-row;
+    vertical-align: bottom;
+    height: fit-content;
+}
+.menu_price{
+    text-align: right;
+    width: 40%;
+    margin-right: 5%;
+    float: right;
+}
+.offcanvas-body{
+    position: relative;
+}
+.off_body{
+    width: 100%;
+}
+/* offcanvas */
+.off_menu{
+    font-size: 18px;
+}
+.clear_div{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+}
+.off_price{
+    font-size: 20px;
+    padding-left: 4%;
+}
+.clear_btn{
+    overflow: scroll;
+    background-color: #ffc107;
+    border: none;
+    width: 100%;
+    height: 5vh;
+    font-size: 20px;
+    font-weight: bold;
+    left: 0;
+}
+/* order_sheet */
+#order_sheet{
+    height: 94vh;
+    width: 30vw;
+    float: right;
+    overflow: scroll;
+    font-size: 15px;
+    font-weight: bold;
+    border-left: 13px solid white;
+}
+
+/* body {
+    background-color: #b8dbfd !important;
+} */
+
+.order {
+    width: 95%;
+    height: 100%;
+    margin: 0 auto;
+    /* background-color:lightgreen; */
+    /* background-color:lightpink; */
+    /* background-color: tomato; */
+    background-color: white;
+    border-radius: 5%;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    max-width: 500px;
+    max-height: 200px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    margin-bottom: 5%;
+    /* background-color:lightgreen; */
+    /* background-color:lightpink; */
+    /* background-color: tomato; */
+    background-color: white;
+    border-radius: 5%;
+}
+
+.thumbnail {
+    margin: 20px;
+    max-width: 200px;
+    width: 100%;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.menu_price {
+    position:absolute;
+    bottom: 5%;
+    right: 1%;
+    font-size: 16px;
+    font-weight: 600;
+    }
+
+.menu_count {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.menu_title {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.menu_title_main {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.menu_info {
+    color: grey;
+    font-size: 13px;
+}

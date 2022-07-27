@@ -39,6 +39,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='POS_table.html'">
+                            POS
+                        </button>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -75,6 +81,12 @@
                         <button type="button" class="btn position-relative"
                             onclick="window.location.href='QRCODE.html'">
                             QR코드
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='store_settings.html'">
+                            설정
                         </button>
                     </li>
                     <li class="nav-item">
@@ -182,6 +194,13 @@
     <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%">메뉴</div>
     <div class="container mt-3">
         <div class="row" id="content-body"></div>
+        <div id="loading">
+            <div class="d-flex justify-content-center" style="margin-top:10%;">
+                <div class="spinner-border" role="status" style="width:3rem;height:3rem">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -226,6 +245,7 @@
                      </div>`;
                 $("#content-body").append(templete);
             })
+            $("#loading").attr("style", "display:none");
         })
     </script>
     <!--기본 메뉴페이지 화면-->
@@ -236,7 +256,9 @@
             data.forEach((doc) => {
                 for (var i in doc.data()) {
                     if (doc.data()[i] != false) {
-                        count++;
+                        doc.data()[i].forEach((result) => {
+                            count++;
+                        })
                     }
                 }
             })

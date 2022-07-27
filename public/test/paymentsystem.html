@@ -14,37 +14,37 @@
     <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
 
     <script>
+        // IMP.request_pay(param, callback) 결제창 호출
+        var IMP = window.IMP; // 생략 가능
+        IMP.init("imp17369910"); // 예: imp00000000
+        IMP.request_pay({ // param
+            pg: "html5_inicis",
+            pay_method: "card",
+            merchant_uid: new Date().getTime(),
+            name: "테스트물품",
+            amount: 100,
+            buyer_email: "gildong@gmail.com",
+            buyer_name: "홍길동",
+            buyer_tel: "01042424242",
+            buyer_addr: "서울특별시 강남구 신사동",
+            buyer_postcode: "01181",
+            m_redirect_url: window.location.href + "/paymentsuccess.html?buyer_name=홍길동&buyer_tel=010-4242-4242&buyer_email=gildong@gmail.com"
+        }, function (rsp) { // callback
+            var msg;
+            if (rsp.success) {
+                msg = "결제성공";
+                window.location.href = "paymentsuccess.html?buyer_name=" + rsp.buyer_name + "&buyer_tel=" + rsp.buyer_tel
+                    + "&buyer_email=" + rsp.buyer_email;
+            } else {
+                msg = "결제취소";
+            }
+            alert(msg);
+        });
+
         function requestPay() {
-            // IMP.request_pay(param, callback) 결제창 호출
-            var IMP = window.IMP; // 생략 가능
-            IMP.init("imp17369910"); // 예: imp00000000
-            IMP.request_pay({ // param
-                pg: "html5_inicis",
-                pay_method: "card",
-                merchant_uid: new Date().getTime(),
-                name: "테스트물품",
-                amount: 100,
-                buyer_email: "gildong@gmail.com",
-                buyer_name: "홍길동",
-                buyer_tel: "01042424242",
-                buyer_addr: "서울특별시 강남구 신사동",
-                buyer_postcode: "01181",
-                m_redirect_url: window.location.href + "/paymentsuccess.html?buyer_name=홍길동&buyer_tel=010-4242-4242&buyer_email=gildong@gmail.com"
-            }, function (rsp) { // callback
-                var msg;
-                if (rsp.success) {
-                    msg = "결제성공";
-                    window.location.href = "paymentsuccess.html?buyer_name=" + rsp.buyer_name + "&buyer_tel=" + rsp.buyer_tel
-                        + "&buyer_email=" + rsp.buyer_email;
-                } else {
-                    msg = "결제취소";
-                }
-                alert(msg);
-            });
+
         }
     </script>
-
-    <button onclick="requestPay()">KG이니시스 결제</button>
 
 </body>
 

@@ -48,11 +48,17 @@
                 <div><a href="signup.html" style="text-decoration:none;color:black">회원가입</a></div>
             </div>
             <div>
-                <button type="submit" class="btn btn-primary btn-sm" id="login" style="width:100%">로그인</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="login" style="width:100%">
+                    <span class="spinner-border spinner-border-sm" id="login-spinner" role="status" aria-hidden="true"
+                        style="display:none"></span>
+                    <span class="visually-hidden">Loading...</span>
+                    로그인
+                </button>
             </div>
         </div>
     </div>
-    <div style="text-align:center"><a href="../user/login.html" style="text-decoration:none;color:black">고객으로 로그인하기</a></div>
+    <div style="text-align:center"><a href="../user/login.html" style="text-decoration:none;color:black">고객으로 로그인하기</a>
+    </div>
 
     <script>
         $("#email").keydown(function (key) {
@@ -66,13 +72,11 @@
                 $("#login").trigger("click");
             }
         });
-        
+
         $("#login").click(function () {
+            $("#login-spinner").attr("style", "margin-right:10px");
             var email = $("#email").val();
             var password = $("#password").val();
-
-            $("#login").css("cursor", "wait");
-            $("body").css("cursor", "wait");
 
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((result) => {
@@ -83,6 +87,7 @@
                     setUserdataToLocal(entrepreneur_name, entrepreneur_email, entrepreneur_uid);
                 })
                 .catch((error) => {
+                    $("#login-spinner").attr("style", "display:none");
                     if (error.code == "auth/wrong-password") {
                         alert("패스워드를 잘못입력했습니다.");
                     } else if (error.code == "auth/user-not-found") {

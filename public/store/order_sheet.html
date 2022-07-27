@@ -40,6 +40,12 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='POS_table.html'">
+                            POS
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button type="button" class="btn position-relative" onclick="window.location.href='menu.html'">
                             메뉴관리
                         </button>
@@ -73,6 +79,12 @@
                         </button>
                     </li>
                     <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='store_settings.html'">
+                            설정
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button type="button" class="btn position-relative" onclick="logout()">
                             로그아웃
                         </button>
@@ -98,6 +110,13 @@
     </div>
 
     <div style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%" id="order_sheet_head"></div>
+    <div id="loading">
+        <div class="d-flex justify-content-center" style="margin-top:18%;">
+            <div class="spinner-border" role="status" style="width:3rem;height:3rem">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
     <div id="order_none" style="text-align:center;font-size: 3em;margin-top:5%;margin-bottom:2%"></div>
     <div id="order_sheet" class="row" style="max-width:1000px;width:100%;margin: 0 auto"></div>
     <script>
@@ -153,6 +172,7 @@
                 $("#order_sheet_badge").html(order_sheet_count);
                 $("#order_sheet_head").html(order_sheet_count + "개의 주문이 있어요.");
             }
+            $("#loading").attr("style", "display:none");
         })
 
         function ready(order_id) {
@@ -167,7 +187,9 @@
             data.forEach((doc) => {
                 for (var i in doc.data()) {
                     if (doc.data()[i] != false) {
-                        count++;
+                        doc.data()[i].forEach((result) => {
+                            count++;
+                        })
                     }
                 }
             })

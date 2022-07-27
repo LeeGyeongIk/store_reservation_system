@@ -51,8 +51,12 @@
                     style="max-width:500px;width:100%;margin-bottom:10px">
                 <label for="floatingPassword">Password</label>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm" id="signup"
-                style="width:100%;margin-top:10px">회원가입</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="signup" style="width:100%;margin-top:10px">
+                <span class="spinner-border spinner-border-sm" id="login-spinner" role="status" aria-hidden="true"
+                    style="display:none"></span>
+                <span class="visually-hidden">Loading...</span>
+                회원가입
+            </button>
         </div>
     </div>
 
@@ -62,6 +66,7 @@
 
     <script>
         $("#signup").click(function () {
+            $("#login-spinner").attr("style", "margin-right:10px");
             var name = $("#name").val();
             var phone = $("#phone").val();
             var email = $("#email").val();
@@ -70,11 +75,7 @@
                 고객명: name,
                 휴대전화: phone,
                 이메일: email
-            }
-
-            $("#signup").css("cursor", "wait");
-            $("body").css("cursor", "wait");
-
+            };
             firebase.auth().createUserWithEmailAndPassword(email, password).then((result) => {
                 result.user.updateProfile({ displayName: name + "&" + phone + "&" + "client" }).then(() => {
                     db.collection("고객").doc(result.user.uid).set(user_data).then(() => {
@@ -82,6 +83,7 @@
                     })
                 })
             }).catch((error) => {
+                $("#login-spinner").attr("style", "display:none");
                 if (error.code == "auth/email-already-in-use") {
                     alert("이미 사용중인 이메일 입니다.");
                 } else {

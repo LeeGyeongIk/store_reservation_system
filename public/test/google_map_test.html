@@ -4,76 +4,45 @@
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <title>Google Maps JavaScript API v3 Example: Geocoding Simple</title>
-    <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet"
-        type="text/css" />
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-    <script type="text/javascript">
-        var geocoder;
-        var map;
-        var marker;
-
-        function initialize() {
-            geocoder = new google.maps.Geocoder();
-            var latlng = new google.maps.LatLng(-34.397, 150.644);
-            var myOptions = {
-                zoom: 8,
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            }
-            map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-        }
-
-        function codeAddress() {
-            var address = document.getElementById("address").value;
-            var r = document.getElementById("r");
-
-            r.innerHTML = '';
-
-            geocoder.geocode({
-                'address': address
-            }, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    map.setCenter(results[0].geometry.location);
-                    addMark(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-
-                    for (var i in results) {
-                        //r.innerHTML += results[i].formatted_address+',';
-                        var li = document.createElement('li');
-                        var a = document.createElement('a');
-                        a.href = "javascript:addMark(" + marker.position.lat() + ", " + marker.position.lng() + ");";
-                        a.innerHTML = results[i].formatted_address;
-
-                        li.appendChild(a);
-                        r.appendChild(li);
-                    }
-                } else {
-                    r.innerHTML = "검색 결과가 없습니다." + status;
-                }
-            });
-        }
-
-        function addMark(lat, lng) {
-            if (typeof marker != 'undefined') {
-                marker.setMap(null);
-            }
-
-            marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(lat, lng)
-            });
-        }
-
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <title>Document</title>
 </head>
 
-<body onload="initialize()">
-    <div>
-        <input id="address" type="textbox" value="Sydney, NSW">
-        <input type="button" value="Geocode" onclick="codeAddress()">
-    </div>
-    <div id="r"></div>
-    <div id="map_canvas" style="height:90%;top:30px"></div>
+<body>
+    <div id="map" style="width:500px;height:300px;border: 1px solid gainsboro;margin-bottom:15px"></div> <!--지도가 출력되는 곳-->
+    <input type="text" class="form-control" id="location_input" placeholder="주소를 입력하세요"
+        style="max-width:300px;width:100%"> <!--주소를 입력하는 곳-->
+    <div id="print_lat_lng"></div> <!--위도 및 경도를 출력하는 곳-->
+    <script>
+        var autocomplete;
+        var location_temp;
+
+        function initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById('location_input')), { types: ['geocode'] });
+            // When the user selects an address from the dropdown, populate the address
+            // fields in the form.
+            autocomplete.addListener('place_changed', initMap);
+        }
+        function initMap() {
+            var place = autocomplete.getPlace();
+            var location = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() }; // lat = 위도, lng = 경도
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: location,
+                zoom: 15
+            });
+            var maker = new google.maps.Marker({ position: location, map: map });
+            location_temp = location;
+
+            $("#print_lat_lng").empty();
+            $("#print_lat_lng").html(`위도: ${location.lat}<br>경도: ${location.lng}`);
+        } 
+    </script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhJuSpWMTgKSyGqrl2u4p5FOXFFA4-Z10&libraries=places&callback=initAutocomplete"
+        async defer></script>
 </body>
 
 </html>

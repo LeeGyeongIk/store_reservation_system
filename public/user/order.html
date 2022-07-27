@@ -67,7 +67,7 @@
             <div id="bill-content-body"></div>
             <div style="max-width:500px;width:100%;margin: 0 auto">
                 <button type="button" class="btn btn-primary" id="bill-do-order"
-                    style="width:100%;margin-bottom:10px">주문하기</button>
+                    style="width:100%;margin-bottom:10px;margin-top:5%">결제하기</button>
                 <button type="button" class="btn btn-warning" id="bill-back-menu" style="width:100%">돌아가기</button>
             </div>
         </div>
@@ -81,7 +81,7 @@
             <h5 id="offcanvasRightLabel">메뉴 주문</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body" style="margin: 0 auto">
+        <div class="offcanvas-body" style="margin: 0 auto;padding:0px">
             <div style="text-align:center;font-size: 3em;margin-bottom:2%">메뉴 주문</div>
             <hr style="height:2px">
             <div>
@@ -117,7 +117,8 @@
                     <label id="count" style="font-size: 3em;margin-left:10%;margin-right:10%"></label>
                     <button type="button" class="btn btn-primary" id="plus">+</button>
                 </div>
-                <button type="button" class="btn btn-primary" style="width:100%" id="add_menu">메뉴 추가</button>
+                <button type="button" class="btn btn-primary" style="width:100%;margin-bottom:5%" id="add_menu">메뉴
+                    추가</button>
             </div>
         </div>
     </div>
@@ -152,6 +153,9 @@
         //var table_num = 1;
         var cart = new Array();
         var bill = new Array();
+
+        localStorage.setItem("store_id", store_id);
+        localStorage.setItem("table_num", table_num);
 
         db.collection("매장").doc(store_id).collection("메뉴정보").get().then((result) => {
             result.forEach((doc) => {
@@ -192,7 +196,7 @@
                 }
             })
             if (bill_count == 0) {
-                $("#bill_count").attr("style", "");
+                $("#bill_count").attr("style", "display:none");
             } else {
                 $("#bill_count").attr("style", "");
                 $("#bill_count").html(bill_count);
@@ -295,6 +299,10 @@
             $("#offcanvasRight-cart").offcanvas("hide");
         })
 
+        $("#bill-back-menu").click(function () {
+            $("#offcanvasBottom-bill").offcanvas("hide");
+        })
+
         $("#bill-do-order").click(function () {
             var item_name = "";
             var item_price = 0;
@@ -322,17 +330,14 @@
                 //buyer_tel: "01042424242",
                 //buyer_addr: "서울특별시 강남구 신사동",
                 //buyer_postcode: "01181",
-                m_redirect_url: window.location.href
+                m_redirect_url: window.location.protocol + "//" + window.location.hostname + "/user/deffered_pay_done.html"
             }, function (rsp) { // callback
                 var msg;
                 if (rsp.success) {
-                    msg = "결제성공";
-                    window.location.href = window.location.href;
+                    window.location.href = window.location.protocol + "//" + window.location.hostname + "/user/deffered_pay_done.html"
                 } else {
-                    msg = "결제취소";
-                    window.location.href = window.location.href;
+                    window.location.href = window.location.protocol + "//" + window.location.hostname + "/user/deffered_pay_done.html"
                 }
-                alert(msg);
             });
         })
 
@@ -353,22 +358,26 @@
                 $("#done_order").append(templete);
             })
 
-            Swal.fire({
-                icon: 'question',
-                title: '바로결제 하시겠습니까?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: '바로결제',
-                denyButtonText: '나중결제',
-                cancelButtonText: '취소'
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    is_pay_now(true);
-                } else if (result.isDenied) {
-                    is_pay_now(false);
-                }
-            })
+            if (table_num != 0) {
+                Swal.fire({
+                    icon: 'question',
+                    title: '바로결제 하시겠습니까?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: '바로결제',
+                    denyButtonText: '나중결제',
+                    cancelButtonText: '취소'
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        is_pay_now(true);
+                    } else if (result.isDenied) {
+                        is_pay_now(false);
+                    }
+                })
+            } else if (table_num == 0) {
+                is_pay_now(true);
+            }
         })
 
         function is_pay_now(pay) {
@@ -379,7 +388,7 @@
                     주문테이블: table_num,
                     주문: cart,
                     준비: false,
-                    결제여부: true
+                    결제여부: true,
                 };
 
                 db.collection("매장").doc(store_id).collection("주문정보").add(order).then((result) => {

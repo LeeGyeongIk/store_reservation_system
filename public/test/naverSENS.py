@@ -4,7 +4,7 @@ import hashlib
 import hmac
 import base64
 
-def send_sms(phone_number, subject, message):
+def send_sms(sms_from, sms_to, subject, message):
   def make_signature(access_key, secret_key, method, uri, timestmap):
     secret_key = bytes(secret_key, 'UTF-8')
 
@@ -27,11 +27,11 @@ def send_sms(phone_number, subject, message):
     "type":"LMS",
     "contentType":"COMM",
     "countryCode":"82",
-    "from":phone_number,
+    "from":sms_from,
     "content": message,
     "messages":[
         {
-            "to": phone_number,
+            "to": sms_to,
             "subject": subject,
             "content": message
         }
@@ -51,4 +51,4 @@ def send_sms(phone_number, subject, message):
   print(res.json())
   return res.json()
 
-send_sms("01037225398","subject","text")
+send_sms("01037225398","01051683224","subject","오늘안에 5000만원 입금하세요")

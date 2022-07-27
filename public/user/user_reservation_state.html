@@ -39,16 +39,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <!-- <a class="nav-link active" aria-current="page" href="usermain.html">매장</a> -->
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='usermain.html'">
+                    <li class="nav-item" onclick="window.location.href='usermain.html'">
+                        <button type="button" class="btn position-relative">
                             매장
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='user_reservation_state.html'">
+                    <li class="nav-item" onclick="window.location.href='user_reservation_state.html'">
+                        <button type="button" class="btn position-relative">
                             예약현황
                             <span
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -57,17 +54,17 @@
                             </span>
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='userinfo.html'">
+                    <li class="nav-item" onclick="window.location.href='userinfo.html'">
+                        <button type="button" class="btn position-relative">
                             내 정보
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative" onclick="logout()">
+                    <li class="nav-item" onclick="logout()">
+                        <button type="button" class="btn position-relative">
                             로그아웃
                         </button>
                     </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -158,58 +155,11 @@
     </div>
 
     <div style="max-width:500px;margin: 0 auto" id="loading">
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-8"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-2"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-8"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-2"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-        </p>
+        <div class="d-flex justify-content-center" style="margin-top:55%;">
+            <div class="spinner-border" role="status" style="width:3rem;height:3rem">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -249,7 +199,7 @@
                     db.collection("매장").doc(doc.data().매장uid).get().then((result) => {
                         var templete =
                             `<div class="col-lg-4 col-md-6">
-                             <div class="reservation" onclick="selected_reservation_id='${doc.id}';selected_reservation_store_uid='${doc.data().매장uid}';reserved_day='${doc.data().예약일}';reserved_time='${doc.data().예약시간}';show_offcanvas('${result.data().매장사진}','${result.data().매장정보}','${doc.data().예약일}','${doc.data().예약시간}')">
+                             <div class="reservation" onclick="selected_reservation_id='${doc.id}';selected_reservation_store_uid='${doc.data().매장uid}';reserved_day='${doc.data().예약일}';reserved_time='${doc.data().예약시간}';show_offcanvas('${result.data().매장사진}','${result.data().매장정보}','${doc.data().예약일}','${doc.data().예약시간}','${doc.id}')">
                              <div class="thumbnail" style="background-image: url('${result.data().매장사진}')"></div>
                              <div class="flex-grow-1 p-4">
                              <h5 class="store_name">${result.data().매장이름}</h5>
@@ -259,9 +209,9 @@
                              </div>`;
                         $("#content-body").append(templete);
                     })
-                    $("#loading").attr("style", "display:none");
                 })
             }
+            $("#loading").attr("style", "display:none");
         }
     </script>
     <script>
@@ -271,8 +221,22 @@
 
         $("#reservation_cancel").click(function () {
             db.collection("고객").doc(localStorage.getItem("useruid")).collection("예약정보").doc(selected_reservation_id).delete().then(() => {
-                db.collection("매장").doc(selected_reservation_store_uid).collection("예약정보").doc(reserved_day).update({
-                    [reserved_time]: false
+                db.collection("매장").doc(selected_reservation_store_uid).collection("예약정보").doc(reserved_day).get().then((result) => {
+                    var reserved_arr = result.data()[reserved_time];
+                    for (var i = 0; i < result.data()[reserved_time].length; i++) {
+                        if (result.data()[reserved_time][i].예약번호 == selected_reservation_id) {
+                            reserved_arr.splice(i,1);
+                        }
+                    }
+                    if (reserved_arr.length == 0) {
+                        db.collection("매장").doc(selected_reservation_store_uid).collection("예약정보").doc(reserved_day).update({
+                            [reserved_time]: false
+                        })
+                    } else {
+                        db.collection("매장").doc(selected_reservation_store_uid).collection("예약정보").doc(reserved_day).update({
+                            [reserved_time]: reserved_arr
+                        })
+                    }
                 })
             }).then(() => {
                 alert("예약이 취소되었습니다.");
@@ -281,7 +245,7 @@
         })
     </script>
     <script>
-        function show_offcanvas(store_img, store_info, reservate_date, reservate_time) {
+        function show_offcanvas(store_img, store_info, reservate_date, reservate_time, id) {
             $("#store_img").attr("src", store_img);
             $("#store_info").html(store_info);
             $("#reservate_date").html(reservate_date);

@@ -39,16 +39,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <!-- <a class="nav-link active" aria-current="page" href="usermain.html">매장</a> -->
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='usermain.html'">
+                    <li class="nav-item" onclick="window.location.href='usermain.html'">
+                        <button type="button" class="btn position-relative">
                             매장
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='user_reservation_state.html'">
+                    <li class="nav-item" onclick="window.location.href='user_reservation_state.html'">
+                        <button type="button" class="btn position-relative">
                             예약현황
                             <span
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -57,14 +54,13 @@
                             </span>
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative"
-                            onclick="window.location.href='userinfo.html'">
+                    <li class="nav-item" onclick="window.location.href='userinfo.html'">
+                        <button type="button" class="btn position-relative">
                             내 정보
                         </button>
                     </li>
-                    <li class="nav-item">
-                        <button type="button" class="btn position-relative" onclick="logout()">
+                    <li class="nav-item" onclick="logout()">
+                        <button type="button" class="btn position-relative">
                             로그아웃
                         </button>
                     </li>
@@ -76,77 +72,18 @@
     <div class="container mt-3">
         <div class="search" style="margin: 0 auto;margin-bottom: 3%;max-width:500px;width:100%">
             <input type="text" placeholder="매장명을 입력하세요" id="searchbox" onkeyup="vacuum()">
-            <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="searchimg" onclick="filter()">
-        </div>
-        <div class="category-group" style="margin-bottom:5%">
-            <input type="radio" class="btn-check" name="options-outlined" id="none" autocomplete="off">
-            <label class="btn btn-outline-success" for="none">없음</label>
-
-            <input type="radio" class="btn-check" name="options-outlined" id="cafe" autocomplete="off">
-            <label class="btn btn-outline-success" for="cafe">카페</label>
-
-            <input type="radio" class="btn-check" name="options-outlined" id="restaurant" autocomplete="off">
-            <label class="btn btn-outline-success" for="restaurant">식당</label>
-
-            <input type="radio" class="btn-check" name="options-outlined" id="convenience" autocomplete="off">
-            <label class="btn btn-outline-success" for="convenience">편의점</label>
+            <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png" id="searchimg"
+                onclick="filter()">
         </div>
         <div class="row" id="content-body"></div>
     </div>
 
-    <div style="max-width:500px;margin: 0 auto" id="loading">
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-8"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-2"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-8"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-7"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-        </p>
-        <p class="card-text placeholder-glow">
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-2"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-3"></span>
-            <span class="placeholder col-8"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-            <span class="placeholder col-12"></span>
-        </p>
+    <div id="loading">
+        <div class="d-flex justify-content-center" style="margin-top:10%;">
+            <div class="spinner-border" role="status" style="width:3rem;height:3rem">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -192,34 +129,6 @@
     </script>
 
     <script>
-        $("#none").click(function () {
-            initApp(store_info);
-        })
-        $("#cafe").click(function () {
-            category_search("카페");
-        })
-        $("#restaurant").click(function () {
-            category_search("식당");
-        })
-        $("#convenience").click(function () {
-            category_search("편의점");
-        })
-
-        function category_search(category_temp) {
-            $("#content-body").empty();
-            var category = [];
-
-            store_info.forEach((doc) => {
-                if (doc.data().업종 == category_temp) {
-                    category.push(doc);
-                }
-            })
-            $("#searchbox").val("");
-            initApp(category);
-        }
-    </script>
-
-    <script>
         function vacuum() {
             if ($("#searchbox").val() == "") {
                 initApp(store_info);
@@ -233,7 +142,7 @@
             data.forEach((doc) => {
                 var templete =
                     `<div class="col-lg-4 col-md-6">
-                     <div class="store" onclick="window.location.href='reservation.html?id=${doc.id}'">
+                     <div class="store" onclick="window.location.href='reservation.html?id=${doc.id}&max-reservation=${doc.data().최대예약갯수}'">
                      <div class="thumbnail" style="background-image: url('${doc.data().매장사진}')"></div>
                      <div class="flex-grow-1 p-4">
                      <h5 class="store_name">${doc.data().매장이름}</h5>

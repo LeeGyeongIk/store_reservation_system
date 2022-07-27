@@ -42,6 +42,12 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='POS_table.html'">
+                            POS
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button type="button" class="btn position-relative" onclick="window.location.href='menu.html'">
                             메뉴관리
                         </button>
@@ -78,6 +84,12 @@
                         </ul>
                     </li>
                     <li class="nav-item">
+                        <button type="button" class="btn position-relative"
+                            onclick="window.location.href='store_settings.html'">
+                            설정
+                        </button>
+                    </li>
+                    <li class="nav-item">
                         <button type="button" class="btn position-relative" onclick="logout()">
                             로그아웃
                         </button>
@@ -93,6 +105,13 @@
     </div>
 
     <div style="text-align:center;font-size: 3em;margin-top:2%;margin-bottom:3%">QR코드</div>
+    <div id="loading">
+        <div class="d-flex justify-content-center" style="margin-top:10%;">
+            <div class="spinner-border" role="status" style="width:3rem;height:3rem">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
 
     <div>
         <div id="table" class="row" style="max-width:1000px;width:100%;margin: 0 auto"></div>
@@ -153,6 +172,7 @@
                 $("#table").append(templete);
             }
             $("#table0_text").html("테이크아웃");
+            $("#loading").attr("style", "display:none");
         })
     </script>
     <script>
@@ -161,7 +181,9 @@
             data.forEach((doc) => {
                 for (var i in doc.data()) {
                     if (doc.data()[i] != false) {
-                        count++;
+                        doc.data()[i].forEach((result) => {
+                            count++;
+                        })
                     }
                 }
             })

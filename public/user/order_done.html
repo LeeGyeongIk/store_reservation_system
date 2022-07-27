@@ -52,7 +52,7 @@
             db.collection("매장").doc(store_id).collection("주문정보").doc(order).get().then((result) => {
                 result.data().주문.forEach((data) => {
                     var templete =
-                    `<div class="menu">
+                        `<div class="menu">
                      <div class="thumbnail" style="background-image: url('${data.menu_img}')"></div>
                      <div class="flex-grow-1 p-4">
                      <h5 class="menu_title">${data.menu_title}</h5>
@@ -76,7 +76,7 @@
                     $("#order_ready_title").html("주문하신 메뉴가<br>준비되었습니다.");
                     $("#order_ready_num").attr("style", "text-align:center;font-size: 2em;margin-bottom:2%");
                     $("#order_ready_num").html("주문번호<br>" + order);
-                    $("#get_back").attr("style","max-width:500px;width:100%;margin: 0 auto");
+                    $("#get_back").attr("style", "max-width:500px;width:100%;margin: 0 auto");
                 }
             })
         } else if (is_pay_success != null) {
